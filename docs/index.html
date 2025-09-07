@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chicago</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <h1>Chicago</h1>
+      <section id="phaseAddPlayers" v-if="notStarted" class="playerSection">
+        <h2>Add players </h2>
+        <input
+          v-model="playerName"
+          placeholder="..."
+          @keyup.enter="addPlayer"
+        />
+        <button v-if="playerName.length > 0" @click="addPlayer">Ok</button>
+        <h3>Players</h3>
+        <p v-for="player in players">{{player.name}}</p>
+        <button v-if="players.length > 1" @click="started">Start</button>
+      </section>
+      <section id="phaseRounds" v-if="!notStarted">
+        <div class="playerSection">
+        <h2 v-model>Round {{rounds}}</h2>
+        <h3>Players</h2>
+        <p v-for="player in players">{{player.name}}: {{player.score}}</p>
+        </div>
+        <h3>Current player: {{players[currentPlayer].name}}</h3>
+        <div class="grid-container">
+          <button @click="addScore(0)">{{values[0].name}}</button>
+           <button @click="addScore(1)">{{values[1].name}}</button>
+            <button @click="addScore(2)">{{values[2].name}}</button>
+             <button @click="addScore(3)">{{values[3].name}}</button>
+              <button @click="addScore(4)">{{values[4].name}}</button>
+               <button @click="addScore(5)">{{values[5].name}}</button>
+                <button @click="addScore(6)"> {{values[6].name}}</button>
+                 <button @click="addScore(7)">{{values[7].name}}</button>
+        </div>
+      </section>
+      <section id="phaseTricks"></section>
+    </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const { createApp } = Vue;
+      createApp({
+        data() {
+          return {
+            playerName: "",
+            players: [],
+            currentPlayer: "",
+            notStarted: true,
+            rounds: 1,
+            values: [
+              {
+                name: "One pair",
+                points: 1
+              },
+               {
+                name: "Two pair",
+                points: 2
+               },
+                {
+                name: "Three of a kind",
+                points: 3
+               },
+                {
+                name: "Straight",
+                points: 4
+               },
+               {
+                name: "Flush",
+                points: 5
+               },
+               {
+                name: "Full House",
+                points: 6
+               },
+               {
+                name: "Four of a kind",
+                points: 8,
+                reset: false
+               },
+               {
+                name: "Straight Flush",
+                points: 52
+               },
+          ]
+          };
+        },
+        methods: {
+          addPlayer() {
+            this.players.push({
+              name: this.playerName,
+              score: 0,
+            });
+            this.playerName = "";
+          },
+          started() {
+            this.notStarted = false;
+            
+            let randomNum = Math.floor(Math.random() * (this.players.length -1));
+            this.currentPlayer = randomNum;
+          },
+          addScore(valueIndex) {
+            this.players[this.currentPlayer].score += this.values[valueIndex].points;
+            if(this.currentPlayer === (this.players.length -1)) {
+              this.currentPlayer = 0;
+            }
+            else {
+              this.currentPlayer++;
+            }
+          },
+        },
+      }).mount("#app");
+    </script>
+  </body>
+</html>

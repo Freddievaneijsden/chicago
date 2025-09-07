@@ -1,0 +1,23 @@
+h1 {
+    text-align: center;
+}
+
+button {
+    font-weight: bold;
+}
+
+.playerSection {
+    background-color: rgb(177, 176, 176);
+    width: 100%;
+}
+
+.div {
+    background-color: rgb(177, 176, 176);;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin: 0 10%;
+}
