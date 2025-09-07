@@ -65,6 +65,12 @@ input {
     width: 100%;
 }
 
+.output {
+    font-family: "Lora", serif;
+    font-size: 1rem;
+     color: #f8f0e3
+}
+
 .btnWrapper {
   display: flex;
   justify-content: center;
@@ -84,13 +90,9 @@ input {
   margin-bottom: 5%;
 }
 
-.currentPlayer:hover {
-    font-weight: bold;
-    color: #ffd700;
-}
-
-button:hover {
-    background-color: #c5a028;
+.changeBtn {
+  font-weight: bold;
+  padding: 0.2rem 0.8rem;
 }
 
 button:active {
@@ -98,9 +100,45 @@ button:active {
   transform: translateY(1px);
 }
 
+.currentPlayer:active {
+    font-weight: bold;
+    color: #ffd700;
+}
+
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
   margin: 0 10%;
+}
+
+/* ===============================
+   MEDIA QUERIES
+=================================*/
+
+/* Tablet */
+@media screen and (min-width: 768px), (max-width: 1023px) and (orientation: landscape) {
+
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+button:hover {
+    background-color: #c5a028;
+    font-weight: bold;
+}
+
+.currentPlayer:hover {
+    font-weight: bold;
+    color: #ffd700;
+}
+
+button:active {
+  background-color:  #ffd700; 
+  transform: translateY(1px);
+}
+
+  .grid-container {
+  grid-template-columns: repeat(3, 1fr);
+}
 }

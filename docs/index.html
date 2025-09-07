@@ -12,11 +12,13 @@
       <section id="phaseAddPlayers" v-if="notStarted" class="phaseStart">
         <h2>Add players</h2>
         <input
-          v-model="playerName"
+          v-model.trim="playerName"
           placeholder="Name"
           @keyup.enter="addPlayer"
+          @input="playerName = $event.target.value"
         />
         <button v-if="playerName.length > 0" @click="addPlayer">Ok</button>
+        <p class="output">{{output}}</p>
         <div class="playerSection">
           <p v-for="player in players">{{player.name}}</p>
         </div>
@@ -33,9 +35,13 @@
             <p v-for="player in players">{{player.name}}: {{player.score}}</p>
           </div>
           <p>
-            Add score to player:
+            Add score to:
             <span class="currentPlayer">{{players[currentPlayer].name}}</span>
-            <span><button @click="togglePlayer">Change</button></span>
+            <span
+              ><button @click="togglePlayer" class="changeBtn">
+                Change
+              </button></span
+            >
           </p>
           <div class="grid-container">
             <button @click="addScore(0)">{{values[0].name}}</button>
@@ -56,9 +62,13 @@
             <p v-for="player in players">{{player.name}}: {{player.score}}</p>
           </div>
           <p>
-            Add score to player:
+            Add score to:
             <span class="currentPlayer">{{players[currentPlayer].name}}</span>
-            <span><button @click="togglePlayer">Change</button></span>
+            <span
+              ><button @click="togglePlayer" class="changeBtn">
+                Change
+              </button></span
+            >
           </p>
           <div class="btnWrapper">
             <button @click="addScore(8)">{{values[8].name}}</button>
@@ -133,15 +143,21 @@
             isTrickPhase: false,
             isFinished: false,
             winner: "",
+            output: "",
           };
         },
         methods: {
           addPlayer() {
-            this.players.push({
-              name: this.playerName,
-              score: 0,
-            });
-            this.playerName = "";
+            if (this.playerName === "") {
+              this.output = "Name must be at least one letter!";
+            } else {
+              this.output = "";
+              this.players.push({
+                name: this.playerName,
+                score: 0,
+              });
+              this.playerName = "";
+            }
           },
           started() {
             this.notStarted = false;
