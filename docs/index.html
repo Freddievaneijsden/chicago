@@ -22,12 +22,15 @@
         <button v-if="players.length > 1" @click="started">Start</button>
       </section>
       <section id="phaseRounds" v-if="!notStarted">
+        <section v-if="isRoundPhase">
         <div class="playerSection">
-        <h2 v-model>Round {{rounds}}</h2>
+        <h2>{{phase[0].name}} {{phase[0].round}}</h2>
         <h3>Players</h2>
         <p v-for="player in players">{{player.name}}: {{player.score}}</p>
         </div>
-        <h3>Current player: {{players[currentPlayer].name}}</h3>
+        <p>Add score to player: {{players[currentPlayer].name}} 
+          <span><button @click="togglePlayer">change</button></span>
+        </p>
         <div class="grid-container">
           <button @click="addScore(0)">{{values[0].name}}</button>
            <button @click="addScore(1)">{{values[1].name}}</button>
@@ -38,8 +41,27 @@
                 <button @click="addScore(6)"> {{values[6].name}}</button>
                  <button @click="addScore(7)">{{values[7].name}}</button>
         </div>
+        </section>
       </section>
-      <section id="phaseTricks"></section>
+      <section id="phaseTricks" v-if="!notStarted">
+        <section v-if="isTrickPhase">
+        <div class="playerSection">
+        <h2>{{phase[1].name}}</h2>
+        <h3>Players</h2>
+        <p v-for="player in players">{{player.name}}: {{player.score}}</p>
+        </div>
+        <p>Add score to player: {{players[currentPlayer].name}} 
+          <span><button @click="togglePlayer">change</button></span>
+        </p>
+          <div class="grid-container">
+          <button @click="addScore(8)">{{values[8].name}}</button>
+        </div>
+        </section>
+      </section>
+      <section v-if="isFinished">
+         <h2>Game Over</h2>
+         <h3>{{checkWinner()}}</h2>
+      </section>
     </div>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script>
@@ -51,7 +73,14 @@
             players: [],
             currentPlayer: "",
             notStarted: true,
-            rounds: 1,
+            phase: [{
+              name: "Round",
+              round: 1,
+            },
+            {
+              name: "Trick",
+              round: 1
+             }],
             values: [
               {
                 name: "One pair",
@@ -86,8 +115,16 @@
                 name: "Straight Flush",
                 points: 52
                },
-          ]
-          };
+               {
+                name: "Trick +5",
+                points: 5
+               }
+          ],
+            isRoundPhase: true,
+            isTrickPhase: false,   
+            isFinished: false,
+            winner: "",
+            };
         },
         methods: {
           addPlayer() {
@@ -104,7 +141,28 @@
             this.currentPlayer = randomNum;
           },
           addScore(valueIndex) {
-            this.players[this.currentPlayer].score += this.values[valueIndex].points;
+            if (valueIndex === 8) {
+              this.players[this.currentPlayer].score += this.values[valueIndex].points;
+              this.isRoundPhase = true;
+              this.isTrickPhase = false;
+              this.phase[0].round++;
+            }
+            else if(this.phase[0].round === 2) {
+              this.players[this.currentPlayer].score += this.values[valueIndex].points;
+              this.isRoundPhase = false;
+              this.isTrickPhase = true;
+            }
+            else if (this.phase[0].round === 3) {
+              this.players[this.currentPlayer].score += this.values[valueIndex].points;
+              this.isRoundPhase = false;
+              this.isFinished = true;
+            }
+            else {
+              this.players[this.currentPlayer].score += this.values[valueIndex].points;
+              this.phase[0].round++;
+            }
+          },
+          togglePlayer(){
             if(this.currentPlayer === (this.players.length -1)) {
               this.currentPlayer = 0;
             }
@@ -112,6 +170,16 @@
               this.currentPlayer++;
             }
           },
+          checkWinner() {
+            let highestPoint = 0;
+            let winnerName = "";
+            this.players.forEach(player => {if (player.score > highestPoint) {
+              highestPoint = player.score;
+              winnerName = player.name;
+            }
+            }); 
+            return "The winner is " + winnerName + " with " + highestPoint + " points!";
+          }
         },
       }).mount("#app");
     </script>
