@@ -9,6 +9,7 @@
   <body>
     <div id="app" class="primary-color">
       <h1>Chicago</h1>
+      <h2 class="reset">{{output}}</h2>
       <section id="phaseAddPlayers" v-if="notStarted" class="phaseStart">
         <h2>Add players</h2>
         <input
@@ -187,12 +188,12 @@
               this.players[this.currentPlayer].score +=
                 this.values[valueIndex].points;
               this.isRoundPhase = false;
-              this.isFinished = true;
               this.checkWinner();
             } else {
               this.players[this.currentPlayer].score +=
                 this.values[valueIndex].points;
               this.phase[0].round++;
+              this.output = "";
             }
           },
           togglePlayer() {
@@ -203,6 +204,7 @@
             }
           },
           checkWinner() {
+            let winningThreshhold = 52;
             let highestPoint = 0;
             let winnerName = "";
             this.players.forEach((player) => {
@@ -211,10 +213,19 @@
                 winnerName = player.name;
               }
             });
-            this.winner.push({
-              name: winnerName,
-              score: highestPoint,
-            });
+            if (highestPoint >= winningThreshhold) {
+              this.winner.push({
+                name: winnerName,
+                score: highestPoint,
+              });
+              this.isFinished = true;
+            } else {
+              this.isFinished = false;
+              this.isRoundPhase = true;
+              this.isTrickPhase = false;
+              this.phase[0].round = 1;
+              this.output = "Again!";
+            }
           },
         },
       }).mount("#app");

@@ -71,6 +71,13 @@ input {
      color: #f8f0e3
 }
 
+.reset {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #781c2c;
+    text-align: center;
+}
+
 .btnWrapper {
   display: flex;
   justify-content: center;
