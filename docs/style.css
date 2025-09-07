@@ -1,18 +1,101 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+
+.primary-color {
+    background-color: #1b4332;
+}
+
+.alternative-color {
+    background-color: #781c2c;
+}
+
+.secondary-color {
+    background-color: #d4af37;
+}
+
+.primary-font {
+    color: #f8f0e3;
+}
+
+
 h1 {
+    font-family: "Cinzel";
     text-align: center;
+    font-size: 2.5rem;
+    padding-top: 5%;
+     color: #f8f0e3;
+
+}
+
+h2 {
+    font-family: "Cinzel";
+    font-size: 1.5rem;
+     color: #f8f0e3;
+}
+
+p {
+    font-family: "Lora", serif;
+    font-size: 1.5rem;
+     color: #f8f0e3
 }
 
 button {
-    font-weight: bold;
+    font-family: "Cinzel", serif;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 5%;
+    margin-left: 2%;
+    background-color: #d4af37;
+    color: #2b2b2b;
+}
+
+input {
+    font-size: 1rem;
+    border-radius: 2px;
+    margin-bottom: 5%;
 }
 
 .playerSection {
-    background-color: rgb(177, 176, 176);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin: 0 10%;
     width: 100%;
 }
 
-.div {
-    background-color: rgb(177, 176, 176);;
+.btnWrapper {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+  font-size: 3rem;
+}
+
+.phaseRounds, 
+.phaseStart,
+.phaseTrick {
+    margin: 0% 5%;
+}
+
+.startBtn {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 5%;
+}
+
+.currentPlayer:hover {
+    font-weight: bold;
+    color: #ffd700;
+}
+
+button:hover {
+    background-color: #c5a028;
+}
+
+button:active {
+  background-color:  #ffd700; 
+  transform: translateY(1px);
 }
 
 .grid-container {

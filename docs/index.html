@@ -7,60 +7,67 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div id="app">
+    <div id="app" class="primary-color">
       <h1>Chicago</h1>
-      <section id="phaseAddPlayers" v-if="notStarted" class="playerSection">
-        <h2>Add players </h2>
+      <section id="phaseAddPlayers" v-if="notStarted" class="phaseStart">
+        <h2>Add players</h2>
         <input
           v-model="playerName"
-          placeholder="..."
+          placeholder="Name"
           @keyup.enter="addPlayer"
         />
         <button v-if="playerName.length > 0" @click="addPlayer">Ok</button>
-        <h3>Players</h3>
-        <p v-for="player in players">{{player.name}}</p>
-        <button v-if="players.length > 1" @click="started">Start</button>
+        <div class="playerSection">
+          <p v-for="player in players">{{player.name}}</p>
+        </div>
+        <div class="btnWrapper">
+          <button v-if="players.length > 1" @click="started" class="startBtn">
+            Start
+          </button>
+        </div>
       </section>
       <section id="phaseRounds" v-if="!notStarted">
-        <section v-if="isRoundPhase">
-        <div class="playerSection">
-        <h2>{{phase[0].name}} {{phase[0].round}}</h2>
-        <h3>Players</h2>
-        <p v-for="player in players">{{player.name}}: {{player.score}}</p>
-        </div>
-        <p>Add score to player: {{players[currentPlayer].name}} 
-          <span><button @click="togglePlayer">change</button></span>
-        </p>
-        <div class="grid-container">
-          <button @click="addScore(0)">{{values[0].name}}</button>
-           <button @click="addScore(1)">{{values[1].name}}</button>
+        <section v-if="isRoundPhase" class="phaseRounds">
+          <h2>{{phase[0].name}} {{phase[0].round}}</h2>
+          <div class="playerSection">
+            <p v-for="player in players">{{player.name}}: {{player.score}}</p>
+          </div>
+          <p>
+            Add score to player:
+            <span class="currentPlayer">{{players[currentPlayer].name}}</span>
+            <span><button @click="togglePlayer">Change</button></span>
+          </p>
+          <div class="grid-container">
+            <button @click="addScore(0)">{{values[0].name}}</button>
+            <button @click="addScore(1)">{{values[1].name}}</button>
             <button @click="addScore(2)">{{values[2].name}}</button>
-             <button @click="addScore(3)">{{values[3].name}}</button>
-              <button @click="addScore(4)">{{values[4].name}}</button>
-               <button @click="addScore(5)">{{values[5].name}}</button>
-                <button @click="addScore(6)"> {{values[6].name}}</button>
-                 <button @click="addScore(7)">{{values[7].name}}</button>
-        </div>
+            <button @click="addScore(3)">{{values[3].name}}</button>
+            <button @click="addScore(4)">{{values[4].name}}</button>
+            <button @click="addScore(5)">{{values[5].name}}</button>
+            <button @click="addScore(6)">{{values[6].name}}</button>
+            <button @click="addScore(7)">{{values[7].name}}</button>
+          </div>
         </section>
       </section>
-      <section id="phaseTricks" v-if="!notStarted">
+      <section id="phaseTricks" v-if="!notStarted" class="phaseTrick">
         <section v-if="isTrickPhase">
-        <div class="playerSection">
-        <h2>{{phase[1].name}}</h2>
-        <h3>Players</h2>
-        <p v-for="player in players">{{player.name}}: {{player.score}}</p>
-        </div>
-        <p>Add score to player: {{players[currentPlayer].name}} 
-          <span><button @click="togglePlayer">change</button></span>
-        </p>
-          <div class="grid-container">
-          <button @click="addScore(8)">{{values[8].name}}</button>
-        </div>
+          <h2>{{phase[1].name}}</h2>
+          <div class="playerSection">
+            <p v-for="player in players">{{player.name}}: {{player.score}}</p>
+          </div>
+          <p>
+            Add score to player:
+            <span class="currentPlayer">{{players[currentPlayer].name}}</span>
+            <span><button @click="togglePlayer">Change</button></span>
+          </p>
+          <div class="btnWrapper">
+            <button @click="addScore(8)">{{values[8].name}}</button>
+          </div>
         </section>
       </section>
       <section v-if="isFinished">
-         <h2>Game Over</h2>
-         <h3>{{checkWinner()}}</h2>
+        <h2>Game Over</h2>
+        <p>{{checkWinner()}}</p>
       </section>
     </div>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -73,58 +80,60 @@
             players: [],
             currentPlayer: "",
             notStarted: true,
-            phase: [{
-              name: "Round",
-              round: 1,
-            },
-            {
-              name: "Trick",
-              round: 1
-             }],
+            phase: [
+              {
+                name: "Round",
+                round: 1,
+              },
+              {
+                name: "Trick",
+                round: 1,
+              },
+            ],
             values: [
               {
                 name: "One pair",
-                points: 1
+                points: 1,
               },
-               {
+              {
                 name: "Two pair",
-                points: 2
-               },
-                {
+                points: 2,
+              },
+              {
                 name: "Three of a kind",
-                points: 3
-               },
-                {
+                points: 3,
+              },
+              {
                 name: "Straight",
-                points: 4
-               },
-               {
+                points: 4,
+              },
+              {
                 name: "Flush",
-                points: 5
-               },
-               {
+                points: 5,
+              },
+              {
                 name: "Full House",
-                points: 6
-               },
-               {
+                points: 6,
+              },
+              {
                 name: "Four of a kind",
                 points: 8,
-                reset: false
-               },
-               {
+                reset: false,
+              },
+              {
                 name: "Straight Flush",
-                points: 52
-               },
-               {
+                points: 52,
+              },
+              {
                 name: "Trick +5",
-                points: 5
-               }
-          ],
+                points: 5,
+              },
+            ],
             isRoundPhase: true,
-            isTrickPhase: false,   
+            isTrickPhase: false,
             isFinished: false,
             winner: "",
-            };
+          };
         },
         methods: {
           addPlayer() {
@@ -136,50 +145,59 @@
           },
           started() {
             this.notStarted = false;
-            
-            let randomNum = Math.floor(Math.random() * (this.players.length -1));
+
+            let randomNum = Math.floor(
+              Math.random() * (this.players.length - 1)
+            );
             this.currentPlayer = randomNum;
           },
           addScore(valueIndex) {
             if (valueIndex === 8) {
-              this.players[this.currentPlayer].score += this.values[valueIndex].points;
+              this.players[this.currentPlayer].score +=
+                this.values[valueIndex].points;
               this.isRoundPhase = true;
               this.isTrickPhase = false;
               this.phase[0].round++;
-            }
-            else if(this.phase[0].round === 2) {
-              this.players[this.currentPlayer].score += this.values[valueIndex].points;
+            } else if (this.phase[0].round === 2) {
+              this.players[this.currentPlayer].score +=
+                this.values[valueIndex].points;
               this.isRoundPhase = false;
               this.isTrickPhase = true;
-            }
-            else if (this.phase[0].round === 3) {
-              this.players[this.currentPlayer].score += this.values[valueIndex].points;
+            } else if (this.phase[0].round === 3) {
+              this.players[this.currentPlayer].score +=
+                this.values[valueIndex].points;
               this.isRoundPhase = false;
               this.isFinished = true;
-            }
-            else {
-              this.players[this.currentPlayer].score += this.values[valueIndex].points;
+            } else {
+              this.players[this.currentPlayer].score +=
+                this.values[valueIndex].points;
               this.phase[0].round++;
             }
           },
-          togglePlayer(){
-            if(this.currentPlayer === (this.players.length -1)) {
+          togglePlayer() {
+            if (this.currentPlayer === this.players.length - 1) {
               this.currentPlayer = 0;
-            }
-            else {
+            } else {
               this.currentPlayer++;
             }
           },
           checkWinner() {
             let highestPoint = 0;
             let winnerName = "";
-            this.players.forEach(player => {if (player.score > highestPoint) {
-              highestPoint = player.score;
-              winnerName = player.name;
-            }
-            }); 
-            return "The winner is " + winnerName + " with " + highestPoint + " points!";
-          }
+            this.players.forEach((player) => {
+              if (player.score > highestPoint) {
+                highestPoint = player.score;
+                winnerName = player.name;
+              }
+            });
+            return (
+              "The winner is " +
+              winnerName +
+              " with " +
+              highestPoint +
+              " points!"
+            );
+          },
         },
       }).mount("#app");
     </script>
