@@ -100,8 +100,17 @@ button:active {
   transform: translateY(1px);
 }
 
-.currentPlayer:active {
+.currentPlayer {
     font-weight: bold;
+    border: solid;
+    padding: 0.6rem 1.2rem;
+}
+
+.winningPhrase {
+    padding-bottom: 10%;
+}
+
+.currentPlayer:active {
     color: #ffd700;
 }
 

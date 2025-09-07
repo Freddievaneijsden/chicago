@@ -77,7 +77,11 @@
       </section>
       <section v-if="isFinished">
         <h2>Game Over</h2>
-        <p>{{checkWinner()}}</p>
+        <p class="winningPhrase">
+          The winner is
+          <span class="currentPlayer">{{winner[0].name}}</span> with
+          <span class="currentPlayer">{{winner[0].score}}</span> points!
+        </p>
       </section>
     </div>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -142,7 +146,7 @@
             isRoundPhase: true,
             isTrickPhase: false,
             isFinished: false,
-            winner: "",
+            winner: [],
             output: "",
           };
         },
@@ -184,6 +188,7 @@
                 this.values[valueIndex].points;
               this.isRoundPhase = false;
               this.isFinished = true;
+              this.checkWinner();
             } else {
               this.players[this.currentPlayer].score +=
                 this.values[valueIndex].points;
@@ -206,13 +211,10 @@
                 winnerName = player.name;
               }
             });
-            return (
-              "The winner is " +
-              winnerName +
-              " with " +
-              highestPoint +
-              " points!"
-            );
+            this.winner.push({
+              name: winnerName,
+              score: highestPoint,
+            });
           },
         },
       }).mount("#app");
