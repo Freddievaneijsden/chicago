@@ -10,16 +10,13 @@
     <div id="app" class="primary-color">
       <h1>Chicago</h1>
       <h2 class="reset">{{output}}</h2>
-      <section id="phaseAddPlayers" v-if="notStarted" class="phaseStart">
-        <h2>Add players</h2>
-        <input
-          v-model.trim="playerName"
-          placeholder="Name"
-          @keyup.enter="addPlayer"
-          @input="playerName = $event.target.value"
-        />
-        <button v-if="playerName.length > 0" @click="addPlayer">Ok</button>
-        <p class="output">{{output}}</p>
+      <section v-if="notStarted">
+        <add-players
+          v-if="notStarted"
+          :players="players"
+          header="Add players"
+          class="phaseStart"
+        ></add-players>
         <player-list :players="players" class="playerList"></player-list>
         <div class="btnWrapper">
           <button v-if="players.length > 1" @click="started" class="startBtn">
@@ -146,18 +143,6 @@
           };
         },
         methods: {
-          addPlayer() {
-            if (this.playerName === "") {
-              this.output = "Name must be at least one letter!";
-            } else {
-              this.output = "";
-              this.players.push({
-                name: this.playerName,
-                score: 0,
-              });
-              this.playerName = "";
-            }
-          },
           started() {
             this.notStarted = false;
 
@@ -230,6 +215,43 @@
             <p v-for="player in players">
               {{player.name}}: {{player.score}}</p>
             </div>`,
+        })
+        .component("add-players", {
+          props: ["players", "header"],
+          inheritAttrs: true,
+          template: `<div>
+          <h2>{{header}}</h2>
+        <input
+          v-model.trim="playerName"
+          placeholder="Name"
+          @keyup.enter="addPlayer"
+          @input="playerName = $event.target.value"
+        />
+        <button v-if="playerName.length > 0" @click="addPlayer">Ok</button>
+        <p class="output">{{output}}</p>
+        </div>
+          `,
+          data() {
+            return {
+              playerName: "",
+              output: "",
+            };
+          },
+          methods: {
+            addPlayer() {
+              let name = this.playerName.trim();
+              if (name === "") {
+                this.output = "Name must be at least one letter!";
+              } else {
+                this.output = "";
+                this.players.push({
+                  name: name,
+                  score: 0,
+                });
+                this.playerName = "";
+              }
+            },
+          },
         })
         .mount("#app");
     </script>
