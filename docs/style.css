@@ -58,7 +58,7 @@ input {
     margin-bottom: 5%;
 }
 
-.playerSection {
+.playerList {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     margin: 0 10%;

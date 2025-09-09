@@ -20,9 +20,7 @@
         />
         <button v-if="playerName.length > 0" @click="addPlayer">Ok</button>
         <p class="output">{{output}}</p>
-        <div class="playerSection">
-          <p v-for="player in players">{{player.name}}</p>
-        </div>
+        <player-list :players="players" class="playerList"></player-list>
         <div class="btnWrapper">
           <button v-if="players.length > 1" @click="started" class="startBtn">
             Start
@@ -32,9 +30,7 @@
       <section id="phaseRounds" v-if="!notStarted">
         <section v-if="isRoundPhase" class="phaseRounds">
           <h2>{{phase[0].name}} {{phase[0].round}}</h2>
-          <div class="playerSection">
-            <p v-for="player in players">{{player.name}}: {{player.score}}</p>
-          </div>
+          <player-list :players="players" class="playerList"></player-list>
           <p>
             Add score to:
             <span class="currentPlayer">{{players[currentPlayer].name}}</span>
@@ -59,9 +55,7 @@
       <section id="phaseTricks" v-if="!notStarted" class="phaseTrick">
         <section v-if="isTrickPhase">
           <h2>{{phase[1].name}}</h2>
-          <div class="playerSection">
-            <p v-for="player in players">{{player.name}}: {{player.score}}</p>
-          </div>
+          <player-list :players="players" class="playerList"></player-list>
           <p>
             Add score to:
             <span class="currentPlayer">{{players[currentPlayer].name}}</span>
@@ -228,7 +222,16 @@
             }
           },
         },
-      }).mount("#app");
+      })
+        .component("player-list", {
+          props: ["players"],
+          inheritAttrs: true,
+          template: `<div>
+            <p v-for="player in players">
+              {{player.name}}: {{player.score}}</p>
+            </div>`,
+        })
+        .mount("#app");
     </script>
   </body>
 </html>
