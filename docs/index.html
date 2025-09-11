@@ -18,11 +18,7 @@
           class="phaseStart"
         ></add-players>
         <player-list :players="players" class="playerList"></player-list>
-        <div class="btnWrapper">
-          <button v-if="players.length > 1" @click="started" class="startBtn">
-            Start
-          </button>
-        </div>
+        <start :players="players" @start-game="started"></start>
       </section>
       <section id="phaseRounds" v-if="!notStarted">
         <section v-if="isRoundPhase" class="phaseRounds">
@@ -275,6 +271,15 @@
               }
             },
           },
+        })
+        .component("start", {
+          props: ["players", "notStarted"],
+          inheritAttrs: true,
+          template: `<div class="btnWrapper">
+          <button v-if="players.length > 1"  @click="$emit('start-game')" class="startBtn">
+            Start
+          </button>
+        </div>`,
         })
         .mount("#app");
     </script>
