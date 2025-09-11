@@ -140,6 +140,7 @@
             isFinished: false,
             winner: [],
             output: "",
+            currentDealer: "",
           };
         },
         methods: {
@@ -150,6 +151,7 @@
               Math.random() * (this.players.length - 1)
             );
             this.currentPlayer = randomNum;
+            this.isDealer();
           },
           addScore(valueIndex) {
             if (valueIndex === 8) {
@@ -204,6 +206,26 @@
               this.isTrickPhase = false;
               this.phase[0].round = 1;
               this.output = "Again!";
+              this.isDealer();
+            }
+          },
+          isDealer() {
+            let randNum = Math.floor(Math.random() * this.players.length);
+            let playersLength = this.players.length - 1;
+            if (this.currentDealer === "") {
+              this.currentDealer = randNum;
+              console.log(this.currentDealer + "if");
+              this.players[this.currentDealer].dealer = true;
+            } else if (this.currentDealer === playersLength) {
+              this.players[this.currentDealer].dealer = false;
+              this.players[0].dealer = true;
+              this.currentDealer = 0;
+              console.log(this.currentDealer + "else if");
+            } else {
+              this.players[this.currentDealer].dealer = false;
+              this.currentDealer++;
+              this.players[this.currentDealer].dealer = true;
+              console.log(this.currentDealer + " else");
             }
           },
         },
@@ -212,7 +234,7 @@
           props: ["players"],
           inheritAttrs: true,
           template: `<div>
-            <p v-for="player in players">
+            <p v-for="(player, index) in players" :key="index" :class="{dealer: players[index].dealer}">
               {{player.name}}: {{player.score}}</p>
             </div>`,
         })
@@ -247,6 +269,7 @@
                 this.players.push({
                   name: name,
                   score: 0,
+                  dealer: false,
                 });
                 this.playerName = "";
               }
