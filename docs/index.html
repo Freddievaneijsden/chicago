@@ -17,21 +17,26 @@
           header="Add players"
           class="phaseStart"
         ></add-players>
-        <player-list :players="players" class="playerList"></player-list>
+        <player-list
+          :players="players"
+          :current-player="currentPlayer"
+          @select-player="setCurrentPlayer"
+          class="playerList"
+        ></player-list>
         <start :players="players" @start-game="started"></start>
       </section>
       <section id="phaseRounds" v-if="!notStarted">
         <section v-if="isRoundPhase" class="phaseRounds">
           <h2>{{phase[0].name}} {{phase[0].round}}</h2>
-          <player-list :players="players" class="playerList"></player-list>
+          <player-list
+            :players="players"
+            :current-player="currentPlayer"
+            @select-player="setCurrentPlayer"
+            class="playerList"
+          ></player-list>
           <p>
             Add score to:
             <span class="currentPlayer">{{players[currentPlayer].name}}</span>
-            <span
-              ><button @click="togglePlayer" class="changeBtn">
-                Change
-              </button></span
-            >
           </p>
           <div class="grid-container">
             <button @click="addScore(0)">{{values[0].name}}</button>
@@ -48,15 +53,15 @@
       <section id="phaseTricks" v-if="!notStarted" class="phaseTrick">
         <section v-if="isTrickPhase">
           <h2>{{phase[1].name}}</h2>
-          <player-list :players="players" class="playerList"></player-list>
+          <player-list
+            :players="players"
+            :current-player="currentPlayer"
+            @select-player="setCurrentPlayer"
+            class="playerList"
+          ></player-list>
           <p>
             Add score to:
             <span class="currentPlayer">{{players[currentPlayer].name}}</span>
-            <span
-              ><button @click="togglePlayer" class="changeBtn">
-                Change
-              </button></span
-            >
           </p>
           <div class="btnWrapper">
             <button @click="addScore(8)">{{values[8].name}}</button>
@@ -70,6 +75,9 @@
           <span class="currentPlayer">{{winner[0].name}}</span> with
           <span class="currentPlayer">{{winner[0].score}}</span> points!
         </p>
+        <ul>
+          <li v-for="player in players">{{player.name}}: {{player.score}}</li>
+        </ul>
       </section>
     </div>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -173,12 +181,8 @@
               this.output = "";
             }
           },
-          togglePlayer() {
-            if (this.currentPlayer === this.players.length - 1) {
-              this.currentPlayer = 0;
-            } else {
-              this.currentPlayer++;
-            }
+          setCurrentPlayer(index) {
+            this.currentPlayer = index;
           },
           checkWinner() {
             let winningThreshhold = 52;
@@ -201,7 +205,7 @@
               this.isRoundPhase = true;
               this.isTrickPhase = false;
               this.phase[0].round = 1;
-              this.output = "Again!";
+              this.output = "New round - first to reach 52 wins!";
               this.isDealer();
             }
           },
@@ -227,10 +231,11 @@
         },
       })
         .component("player-list", {
-          props: ["players"],
+          props: ["players", "currentPlayer"],
           inheritAttrs: true,
           template: `<div>
-            <p v-for="(player, index) in players" :key="index" :class="{dealer: players[index].dealer}">
+            <p v-for="(player, index) in players" :key="index" :class="{dealer: players[index].dealer, current: true}"
+            @click="$emit('select-player', index)">
               {{player.name}}: {{player.score}}</p>
             </div>`,
         })
