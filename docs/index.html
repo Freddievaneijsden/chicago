@@ -10,9 +10,8 @@
     <div id="app" class="primary-color">
       <h1>Chicago</h1>
       <h2 class="reset">{{output}}</h2>
-      <section v-if="notStarted">
+      <section v-if="currentPhase===phases.START">
         <add-players
-          v-if="notStarted"
           :players="players"
           header="Add players"
           class="phaseStart"
@@ -25,9 +24,9 @@
         ></player-list>
         <start :players="players" @start-game="started"></start>
       </section>
-      <section id="phaseRounds" v-if="!notStarted">
-        <section v-if="isRoundPhase" class="phaseRounds">
-          <h2>{{phase[0].name}} {{phase[0].round}}</h2>
+      <section>
+        <section v-if="currentPhase===phases.ROUND" class="phaseRounds">
+          <h2>{{phases.ROUND}} {{currentRound}}</h2>
           <player-list
             :players="players"
             :current-player="currentPlayer"
@@ -37,7 +36,9 @@
           ></player-list>
           <p>
             Add score to:
-            <span class="currentPlayer">{{players[currentPlayer].name}}</span>
+            <span class="currentPlayer" v-if="currentPlayer !== null"
+              >{{players[currentPlayer].name}}</span
+            >
           </p>
           <div class="grid-container">
             <button @click="addScore(0)">{{values[0].name}}</button>
@@ -51,9 +52,9 @@
           </div>
         </section>
       </section>
-      <section id="phaseTricks" v-if="!notStarted" class="phaseTrick">
-        <section v-if="isTrickPhase">
-          <h2>{{phase[1].name}}</h2>
+      <section class="phaseTrick">
+        <section v-if="currentPhase===phases.TRICK">
+          <h2>{{phases.TRICK}}</h2>
           <player-list
             :players="players"
             :current-player="currentPlayer"
@@ -63,19 +64,27 @@
           ></player-list>
           <p>
             Add score to:
-            <span class="currentPlayer">{{players[currentPlayer].name}}</span>
+            <span class="currentPlayer" v-if="currentPlayer !== null"
+              >{{players[currentPlayer].name}}</span
+            >
           </p>
           <div class="btnWrapper">
             <button @click="addScore(8)">{{values[8].name}}</button>
           </div>
         </section>
       </section>
-      <section v-if="isFinished">
+      <section v-if="currentPhase===phases.FINISHED">
         <h2>Game Over</h2>
         <p class="winningPhrase">
           The winner is
-          <span class="currentPlayer">{{winner[0].name}}</span> with
-          <span class="currentPlayer">{{winner[0].score}}</span> points!
+          <span class="currentPlayer" v-if="currentPlayer !== null"
+            >{{winner[0]?.name}}</span
+          >
+          with
+          <span class="currentPlayer" v-if="currentPlayer !== null"
+            >{{winner[0]?.score}}</span
+          >
+          points!
         </p>
         <ul>
           <li v-for="player in players">{{player.name}}: {{player.score}}</li>
@@ -90,18 +99,15 @@
           return {
             playerName: "",
             players: [],
-            currentPlayer: "",
-            notStarted: true,
-            phase: [
-              {
-                name: "Round",
-                round: 1,
-              },
-              {
-                name: "Trick",
-                round: 1,
-              },
-            ],
+            currentPlayer: null,
+            phases: {
+              START: "start",
+              ROUND: "round",
+              TRICK: "trick",
+              FINISHED: "finished",
+            },
+            currentPhase: "start",
+            currentRound: 1,
             values: [
               {
                 name: "One pair (1)",
@@ -141,9 +147,6 @@
                 points: 5,
               },
             ],
-            isRoundPhase: true,
-            isTrickPhase: false,
-            isFinished: false,
             winner: [],
             output: "",
             currentDealer: "",
@@ -152,7 +155,7 @@
         },
         methods: {
           started() {
-            this.notStarted = false;
+            this.nextPhase();
 
             let randomNum = Math.floor(Math.random() * this.players.length);
             this.currentPlayer = randomNum;
@@ -164,24 +167,31 @@
               this.players[this.currentPlayer].score +=
                 this.values[valueIndex].points;
               this.showScoring();
-              if (valueIndex === 8) {
-                this.isRoundPhase = true;
-                this.isTrickPhase = false;
-                this.phase[0].round++;
-              } else if (this.phase[0].round === 2) {
-                this.isRoundPhase = false;
-                this.isTrickPhase = true;
-              } else if (this.phase[0].round === 3) {
-                this.isRoundPhase = false;
-                this.checkWinner();
-              } else {
-                this.phase[0].round++;
-                this.output = "";
-              }
+              this.nextPhase();
             }, 300);
+            this.output = "";
           },
           setCurrentPlayer(index) {
             this.currentPlayer = index;
+          },
+          nextPhase() {
+            setTimeout(() => {
+              if (this.currentPhase === this.phases.START) {
+                this.currentPhase = this.phases.ROUND;
+              } else if (this.currentPhase === this.phases.ROUND) {
+                if (this.currentRound === 1) {
+                  this.currentRound++;
+                } else if (this.currentRound === 2) {
+                  this.currentPhase = this.phases.TRICK;
+                  this.currentRound++;
+                } else if (this.currentRound === 3) {
+                  this.checkWinner();
+                }
+              } else if (this.currentPhase === this.phases.TRICK) {
+                this.currentPhase = this.phases.ROUND;
+                this.currentRound = 3;
+              }
+            }, 1500);
           },
           checkWinner() {
             let winningThreshhold = 52;
@@ -194,16 +204,14 @@
               }
             });
             if (highestPoint >= winningThreshhold) {
+              this.currentPhase = this.phases.FINISHED;
               this.winner.push({
                 name: winnerName,
                 score: highestPoint,
               });
-              this.isFinished = true;
             } else {
-              this.isFinished = false;
-              this.isRoundPhase = true;
-              this.isTrickPhase = false;
-              this.phase[0].round = 1;
+              this.currentPhase = this.phases.ROUND;
+              this.currentRound = 1;
               this.output = "New round - first to reach 52 wins!";
               this.isDealer();
             }
@@ -239,26 +247,26 @@
           props: ["players", "currentPlayer", "changeScore"],
           inheritAttrs: true,
           template: `<div>
-            <p v-for="(player, index) in players" :key="index" :class="{dealer: players[index].dealer, current: true}"
-            @click="$emit('select-player', index)">
-              {{player.name}}: <span :class="{highlightScore: changeScore && index == currentPlayer}">{{player.score}}</span></p>
-            </div>`,
+                  <p v-for="(player, index) in players" :key="index" :class="{dealer: players[index].dealer, current: true}"
+                  @click="$emit('select-player', index)">
+                    {{player.name}}: <span :class="{highlightScore: changeScore && index === currentPlayer}">{{player.score}}</span></p>
+                  </div>`,
         })
         .component("add-players", {
           props: ["players", "header"],
           inheritAttrs: true,
           template: `<div class="inputWrapper">
-          <h2>{{header}}</h2>
-        <input
-          v-model.trim="playerName"
-          placeholder="Name"
-          @keyup.enter="addPlayer"
-          @input="playerName = $event.target.value"
-        />
-        <button v-if="playerName.length > 0" @click="addPlayer">Ok</button>
-        <p class="output">{{output}}</p>
-        </div>
-          `,
+                <h2>{{header}}</h2>
+              <input
+                v-model.trim="playerName"
+                placeholder="Name"
+                @keyup.enter="addPlayer"
+                @input="playerName = $event.target.value"
+              />
+              <button v-if="playerName.length > 0" @click="addPlayer">Ok</button>
+              <p class="output">{{output}}</p>
+              </div>
+                `,
           data() {
             return {
               playerName: "",
@@ -283,13 +291,13 @@
           },
         })
         .component("start", {
-          props: ["players", "notStarted"],
+          props: ["players"],
           inheritAttrs: true,
           template: `<div class="btnWrapper">
-          <button v-if="players.length > 1"  @click="$emit('start-game')" class="startBtn">
-            Start
-          </button>
-        </div>`,
+                <button v-if="players.length > 1"  @click="$emit('start-game')" class="startBtn">
+                  Start
+                </button>
+              </div>`,
         })
         .mount("#app");
     </script>
