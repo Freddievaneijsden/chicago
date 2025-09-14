@@ -242,7 +242,7 @@
         .component("add-players", {
           props: ["players", "header"],
           inheritAttrs: true,
-          template: `<div>
+          template: `<div class="inputWrapper">
           <h2>{{header}}</h2>
         <input
           v-model.trim="playerName"

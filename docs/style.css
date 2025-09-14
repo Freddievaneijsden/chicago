@@ -62,9 +62,13 @@ button {
 }
 
 input {
-    font-size: 1rem;
+    font-size: 1.5rem;
     border-radius: 2px;
     margin-bottom: 5%;
+}
+
+.inputWrapper {
+    text-align: center;
 }
 
 .playerList {
