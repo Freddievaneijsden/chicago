@@ -31,6 +31,7 @@
           <player-list
             :players="players"
             :current-player="currentPlayer"
+            :change-score="changeScore"
             @select-player="setCurrentPlayer"
             class="playerList"
           ></player-list>
@@ -56,6 +57,7 @@
           <player-list
             :players="players"
             :current-player="currentPlayer"
+            :change-score="changeScore"
             @select-player="setCurrentPlayer"
             class="playerList"
           ></player-list>
@@ -145,41 +147,38 @@
             winner: [],
             output: "",
             currentDealer: "",
+            changeScore: false,
           };
         },
         methods: {
           started() {
             this.notStarted = false;
 
-            let randomNum = Math.floor(
-              Math.random() * (this.players.length - 1)
-            );
+            let randomNum = Math.floor(Math.random() * this.players.length);
             this.currentPlayer = randomNum;
             this.isDealer();
           },
+
           addScore(valueIndex) {
-            if (valueIndex === 8) {
+            setTimeout(() => {
               this.players[this.currentPlayer].score +=
                 this.values[valueIndex].points;
-              this.isRoundPhase = true;
-              this.isTrickPhase = false;
-              this.phase[0].round++;
-            } else if (this.phase[0].round === 2) {
-              this.players[this.currentPlayer].score +=
-                this.values[valueIndex].points;
-              this.isRoundPhase = false;
-              this.isTrickPhase = true;
-            } else if (this.phase[0].round === 3) {
-              this.players[this.currentPlayer].score +=
-                this.values[valueIndex].points;
-              this.isRoundPhase = false;
-              this.checkWinner();
-            } else {
-              this.players[this.currentPlayer].score +=
-                this.values[valueIndex].points;
-              this.phase[0].round++;
-              this.output = "";
-            }
+              this.showScoring();
+              if (valueIndex === 8) {
+                this.isRoundPhase = true;
+                this.isTrickPhase = false;
+                this.phase[0].round++;
+              } else if (this.phase[0].round === 2) {
+                this.isRoundPhase = false;
+                this.isTrickPhase = true;
+              } else if (this.phase[0].round === 3) {
+                this.isRoundPhase = false;
+                this.checkWinner();
+              } else {
+                this.phase[0].round++;
+                this.output = "";
+              }
+            }, 300);
           },
           setCurrentPlayer(index) {
             this.currentPlayer = index;
@@ -228,15 +227,21 @@
               console.log(this.currentDealer + " else");
             }
           },
+          showScoring() {
+            this.changeScore = true;
+            setTimeout(() => {
+              this.changeScore = false;
+            }, 1000);
+          },
         },
       })
         .component("player-list", {
-          props: ["players", "currentPlayer"],
+          props: ["players", "currentPlayer", "changeScore"],
           inheritAttrs: true,
           template: `<div>
             <p v-for="(player, index) in players" :key="index" :class="{dealer: players[index].dealer, current: true}"
             @click="$emit('select-player', index)">
-              {{player.name}}: {{player.score}}</p>
+              {{player.name}}: <span :class="{highlightScore: changeScore && index == currentPlayer}">{{player.score}}</span></p>
             </div>`,
         })
         .component("add-players", {
