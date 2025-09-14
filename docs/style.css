@@ -155,8 +155,9 @@ button:active {
   margin: 7% 10%;
 }
 
-.dealer {
-    color: #781c2c;
+.dealer, 
+.gameOver {
+    color: #a8263b;
 }
 
 /* ===============================

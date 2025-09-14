@@ -74,7 +74,7 @@
         </section>
       </section>
       <section v-if="currentPhase===phases.FINISHED">
-        <h2>Game Over</h2>
+        <h2 class="gameOver">Game Over</h2>
         <p class="winningPhrase">
           The winner is
           <span class="currentPlayer" v-if="currentPlayer !== null"
@@ -247,10 +247,13 @@
           props: ["players", "currentPlayer", "changeScore"],
           inheritAttrs: true,
           template: `<div>
-                  <p v-for="(player, index) in players" :key="index" :class="{dealer: players[index].dealer, current: true}"
-                  @click="$emit('select-player', index)">
-                    {{player.name}}: <span :class="{highlightScore: changeScore && index === currentPlayer}">{{player.score}}</span></p>
-                  </div>`,
+    <p v-for="(player, index) in players" :key="index" :class="{current: true}"
+       @click="$emit('select-player', index)">
+       
+       <span :class="{dealer: player.dealer}">{{player.name}}:</span>
+       <span :class="{highlightScore: changeScore && index === currentPlayer}">{{player.score}}</span>
+    </p>
+  </div>`,
         })
         .component("add-players", {
           props: ["players", "header"],
