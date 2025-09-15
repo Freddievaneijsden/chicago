@@ -9,7 +9,7 @@
   <body>
     <div id="app" class="primary-color">
       <h1>Chicago</h1>
-      <h2 class="reset">{{output}}</h2>
+      <h2 class="resetOutput">{{output}}</h2>
       <section v-if="currentPhase===phases.START">
         <add-players
           :players="players"
@@ -78,14 +78,17 @@
         <p class="winningPhrase">
           The winner is
           <span class="currentPlayer" v-if="currentPlayer !== null"
-            >{{winner[0]?.name}}</span
+            >{{winner?.name}}</span
           >
           with
           <span class="currentPlayer" v-if="currentPlayer !== null"
-            >{{winner[0]?.score}}</span
+            >{{winner?.score}}</span
           >
           points!
         </p>
+        <div class="btnWrapper">
+          <button class="startBtn" @click="reset()">Reset</button>
+        </div>
         <ul>
           <li v-for="player in players">{{player.name}}: {{player.score}}</li>
         </ul>
@@ -147,7 +150,7 @@
                 points: 5,
               },
             ],
-            winner: [],
+            winner: null,
             output: "",
             currentDealer: "",
             changeScore: false,
@@ -176,6 +179,9 @@
           },
           nextPhase() {
             setTimeout(() => {
+              if (this.currentPhase === this.phases.FINISHES) {
+                this.currentPhase = this.phases.START;
+              }
               if (this.currentPhase === this.phases.START) {
                 this.currentPhase = this.phases.ROUND;
               } else if (this.currentPhase === this.phases.ROUND) {
@@ -205,10 +211,10 @@
             });
             if (highestPoint >= winningThreshhold) {
               this.currentPhase = this.phases.FINISHED;
-              this.winner.push({
+              this.winner = {
                 name: winnerName,
                 score: highestPoint,
-              });
+              };
             } else {
               this.currentPhase = this.phases.ROUND;
               this.currentRound = 1;
@@ -241,6 +247,17 @@
               this.changeScore = false;
             }, 1000);
           },
+          reset() {
+            setTimeout(() => {
+              this.currentPhase = this.phases.START;
+              this.currentRound = 1;
+              this.currentDealer = "";
+              this.currentPlayer = null;
+              this.winner = null;
+              this.output = "";
+              this.players = [];
+            }, 1500);
+          },
         },
       })
         .component("player-list", {
@@ -251,7 +268,7 @@
        @click="$emit('select-player', index)">
        
        <span :class="{dealer: player.dealer}">{{player.name}}:</span>
-       <span :class="{highlightScore: changeScore && index === currentPlayer}">{{player.score}}</span>
+       <span class="score" :class="{highlightScore: changeScore && index === currentPlayer}">{{player.score}}</span>
     </p>
   </div>`,
         })
