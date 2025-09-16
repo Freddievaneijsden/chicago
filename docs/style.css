@@ -121,6 +121,10 @@ input {
   margin-bottom: 5%;
 }
 
+.addScore {
+    width: 100%;
+}
+
 .resetBtn {
   display: flex;
   justify-content: center;
