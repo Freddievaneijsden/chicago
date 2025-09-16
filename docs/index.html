@@ -50,6 +50,9 @@
             <button @click="addScore(6)">{{values[6].name}}</button>
             <button @click="addScore(7)">{{values[7].name}}</button>
           </div>
+          <p>
+            Dealer: <span class="dealer">{{players[currentDealer].name}}</span>
+          </p>
         </section>
       </section>
       <section class="phaseTrick">
@@ -152,7 +155,7 @@
             ],
             winner: null,
             output: "",
-            currentDealer: "",
+            currentDealer: null,
             changeScore: false,
           };
         },
@@ -179,7 +182,7 @@
           },
           nextPhase() {
             setTimeout(() => {
-              if (this.currentPhase === this.phases.FINISHES) {
+              if (this.currentPhase === this.phases.FINISHED) {
                 this.currentPhase = this.phases.START;
               }
               if (this.currentPhase === this.phases.START) {
@@ -223,22 +226,15 @@
             }
           },
           isDealer() {
-            let randNum = Math.floor(Math.random() * this.players.length);
-            let playersLength = this.players.length - 1;
-            if (this.currentDealer === "") {
+            let playersLength = this.players.length;
+            let randNum = Math.floor(Math.random() * playersLength);
+            if (this.currentDealer === null) {
               this.currentDealer = randNum;
               console.log(this.currentDealer + "if");
-              this.players[this.currentDealer].dealer = true;
-            } else if (this.currentDealer === playersLength) {
-              this.players[this.currentDealer].dealer = false;
-              this.players[0].dealer = true;
+            } else if (this.currentDealer === playersLength - 1) {
               this.currentDealer = 0;
-              console.log(this.currentDealer + "else if");
             } else {
-              this.players[this.currentDealer].dealer = false;
               this.currentDealer++;
-              this.players[this.currentDealer].dealer = true;
-              console.log(this.currentDealer + " else");
             }
           },
           showScoring() {
@@ -249,9 +245,9 @@
           },
           reset() {
             setTimeout(() => {
+              this.isDealer();
               this.currentPhase = this.phases.START;
               this.currentRound = 1;
-              this.currentDealer = "";
               this.currentPlayer = null;
               this.winner = null;
               this.output = "";
@@ -265,9 +261,7 @@
           inheritAttrs: true,
           template: `<div>
     <p v-for="(player, index) in players" :key="index" :class="{current: true}"
-       @click="$emit('select-player', index)">
-       
-       <span :class="{dealer: player.dealer}">{{player.name}}:</span>
+       @click="$emit('select-player', index)">{{player.name}}:
        <span class="score" :class="{highlightScore: changeScore && index === currentPlayer}">{{player.score}}</span>
     </p>
   </div>`,
