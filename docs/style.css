@@ -66,6 +66,7 @@ input {
     font-size: 1.5rem;
     border-radius: 2px;
     margin-bottom: 5%;
+    width: 50%;
 }
 
 .inputWrapper {
@@ -86,8 +87,13 @@ input {
 
 .output {
     font-family: "Lora", serif;
-    font-size: 1rem;
-     color: #f8f0e3
+    color: #a8263b;
+    font-size: 1.2rem;
+}
+
+.outputWrapper {
+  display: flex;
+  justify-content: center;
 }
 
 .resetOutput {
