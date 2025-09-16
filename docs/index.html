@@ -74,6 +74,9 @@
           <div class="btnWrapper">
             <button @click="addScore(8)">{{values[8].name}}</button>
           </div>
+          <p>
+            Dealer: <span class="dealer">{{players[currentDealer].name}}</span>
+          </p>
         </section>
       </section>
       <section v-if="currentPhase===phases.FINISHED">
