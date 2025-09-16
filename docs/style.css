@@ -38,6 +38,7 @@ p {
     font-size: 1.5rem;
     color: #f8f0e3;
     text-align: center;
+    width: 80%;
 }
 
 ul {
@@ -170,6 +171,12 @@ button:active {
 .dealer, 
 .gameOver {
     color: #a8263b;
+}
+
+.chip {
+    width: 20px;
+    height: 20px;
+    margin-right: 2%;
 }
 
 /* ===============================

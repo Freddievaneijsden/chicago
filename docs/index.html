@@ -50,9 +50,6 @@
             <button @click="addScore(6)">{{values[6].name}}</button>
             <button @click="addScore(7)">{{values[7].name}}</button>
           </div>
-          <p>
-            Dealer: <span class="dealer">{{players[currentDealer].name}}</span>
-          </p>
         </section>
       </section>
       <section class="phaseTrick">
@@ -74,9 +71,6 @@
           <div class="btnWrapper">
             <button @click="addScore(8)">{{values[8].name}}</button>
           </div>
-          <p>
-            Dealer: <span class="dealer">{{players[currentDealer].name}}</span>
-          </p>
         </section>
       </section>
       <section v-if="currentPhase===phases.FINISHED">
@@ -225,6 +219,7 @@
               this.currentPhase = this.phases.ROUND;
               this.currentRound = 1;
               this.output = "New round - first to reach 52 wins!";
+              this.players[this.currentDealer].dealer = false;
               this.isDealer();
             }
           },
@@ -236,9 +231,12 @@
               console.log(this.currentDealer + "if");
             } else if (this.currentDealer === playersLength - 1) {
               this.currentDealer = 0;
+              console.log(this.currentDealer + "else if");
             } else {
               this.currentDealer++;
+              console.log(this.currentDealer + "else");
             }
+            this.players[this.currentDealer].dealer = true;
           },
           showScoring() {
             this.changeScore = true;
@@ -264,7 +262,7 @@
           inheritAttrs: true,
           template: `<div>
     <p v-for="(player, index) in players" :key="index" :class="{current: true}"
-       @click="$emit('select-player', index)">{{player.name}}:
+       @click="$emit('select-player', index)"> <img src="images/poker-chip-svgrepo-com.svg" alt="Dealer" v-if="player.dealer" class="chip"/> {{player.name}}:
        <span class="score" :class="{highlightScore: changeScore && index === currentPlayer}">{{player.score}}</span>
     </p>
   </div>`,
