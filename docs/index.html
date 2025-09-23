@@ -9,23 +9,32 @@
   <body>
     <div id="app" class="primary-color">
       <h1>Chicago</h1>
-      <h2 class="resetOutput">{{output}}</h2>
-      <section v-if="currentPhase===phases.START">
-        <add-players
-          :players="players"
-          header="Add players"
-          class="phaseStart"
-        ></add-players>
-        <player-list
-          :players="players"
-          :current-player="currentPlayer"
-          @select-player="setCurrentPlayer"
-          class="playerList"
-        ></player-list>
-        <start :players="players" @start-game="started"></start>
-      </section>
-      <section>
-        <section v-if="currentPhase===phases.ROUND" class="phaseRounds">
+      <transition name="fade" mode="out-in">
+        <section v-if="currentPhase===phases.START" key="start">
+          <add-players
+            :players="players"
+            header="Add players"
+            class="phaseStart"
+          ></add-players>
+          <player-list
+            :players="players"
+            :current-player="currentPlayer"
+            @select-player="setCurrentPlayer"
+            class="playerList"
+          ></player-list>
+          <start
+            :players="players"
+            :disabled="buttonsDisabled"
+            :transitioning="transitioning"
+            @start-game="started"
+          ></start>
+        </section>
+        <section
+          v-if="currentPhase===phases.ROUND"
+          class="phaseRounds"
+          :key="`round-${currentRound}`"
+        >
+          <h2 class="resetOutput">{{output}}</h2>
           <h2>{{phases.ROUND}} {{currentRound}}</h2>
           <player-list
             :players="players"
@@ -41,19 +50,17 @@
             >
           </p>
           <div class="grid-container">
-            <button @click="addScore(0)">{{values[0].name}}</button>
-            <button @click="addScore(1)">{{values[1].name}}</button>
-            <button @click="addScore(2)">{{values[2].name}}</button>
-            <button @click="addScore(3)">{{values[3].name}}</button>
-            <button @click="addScore(4)">{{values[4].name}}</button>
-            <button @click="addScore(5)">{{values[5].name}}</button>
-            <button @click="addScore(6)">{{values[6].name}}</button>
-            <button @click="addScore(7)">{{values[7].name}}</button>
+            <button
+              v-for="(value, index) in values.slice(0, -1)"
+              :key="index"
+              @click="addScore(index)"
+              :disabled="buttonsDisabled || transitioning"
+            >
+              {{values[index].name}}
+            </button>
           </div>
         </section>
-      </section>
-      <section class="phaseTrick">
-        <section v-if="currentPhase===phases.TRICK">
+        <section v-if="currentPhase===phases.TRICK" key="trick">
           <h2>{{phases.TRICK}}</h2>
           <player-list
             :players="players"
@@ -69,30 +76,41 @@
             >
           </p>
           <div class="btnWrapper">
-            <button @click="addScore(8)">{{values[8].name}}</button>
+            <button
+              @click="addScore(8)"
+              :disabled="buttonsDisabled || transitioning"
+            >
+              {{values[8].name}}
+            </button>
           </div>
         </section>
-      </section>
-      <section v-if="currentPhase===phases.FINISHED">
-        <h2 class="gameOver">Game Over</h2>
-        <p class="winningPhrase">
-          The winner is
-          <span class="currentPlayer" v-if="currentPlayer !== null"
-            >{{winner?.name}}</span
-          >
-          with
-          <span class="currentPlayer" v-if="currentPlayer !== null"
-            >{{winner?.score}}</span
-          >
-          points!
-        </p>
-        <div class="btnWrapper">
-          <button class="startBtn" @click="reset()">Reset</button>
-        </div>
-        <ul>
-          <li v-for="player in players">{{player.name}}: {{player.score}}</li>
-        </ul>
-      </section>
+        <section v-if="currentPhase===phases.FINISHED" key="finished">
+          <h2 class="gameOver">Game Over</h2>
+          <p class="winningPhrase">
+            The winner is
+            <span class="currentPlayer" v-if="currentPlayer !== null"
+              >{{winner?.name}}</span
+            >
+            with
+            <span class="currentPlayer" v-if="currentPlayer !== null"
+              >{{winner?.score}}</span
+            >
+            points!
+          </p>
+          <div class="btnWrapper">
+            <button
+              class="startBtn"
+              @click="reset()"
+              :disabled="buttonsDisabled"
+            >
+              Reset
+            </button>
+          </div>
+          <ul>
+            <li v-for="player in players">{{player.name}}: {{player.score}}</li>
+          </ul>
+        </section>
+      </transition>
     </div>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script>
@@ -154,30 +172,47 @@
             output: "",
             currentDealer: null,
             changeScore: false,
+            buttonsDisabled: false,
+            transitioning: false,
           };
         },
         methods: {
           started() {
-            this.nextPhase();
+            if (this.buttonsDisabled) return;
 
-            let randomNum = Math.floor(Math.random() * this.players.length);
-            this.currentPlayer = randomNum;
-            this.isDealer();
+            this.buttonsDisabled = true;
+
+            this.nextPhase();
+            setTimeout(() => {
+              let randomNum = Math.floor(Math.random() * this.players.length);
+              this.currentPlayer = randomNum;
+              this.isDealer();
+
+              this.buttonsDisabled = false;
+            }, 1000);
           },
 
           addScore(valueIndex) {
+            if (this.buttonsDisabled) return;
+
+            this.buttonsDisabled = true;
+
             setTimeout(() => {
               this.players[this.currentPlayer].score +=
                 this.values[valueIndex].points;
               this.showScoring();
               this.nextPhase();
-            }, 300);
+
+              this.buttonsDisabled = false;
+            }, 1000);
             this.output = "";
           },
           setCurrentPlayer(index) {
             this.currentPlayer = index;
           },
           nextPhase() {
+            this.transitioning = true;
+
             setTimeout(() => {
               if (this.currentPhase === this.phases.FINISHED) {
                 this.currentPhase = this.phases.START;
@@ -197,7 +232,9 @@
                 this.currentPhase = this.phases.ROUND;
                 this.currentRound = 3;
               }
-            }, 1500);
+
+              this.transitioning = false;
+            }, 1000);
           },
           checkWinner() {
             let winningThreshhold = 52;
@@ -228,13 +265,10 @@
             let randNum = Math.floor(Math.random() * playersLength);
             if (this.currentDealer === null) {
               this.currentDealer = randNum;
-              console.log(this.currentDealer + "if");
             } else if (this.currentDealer === playersLength - 1) {
               this.currentDealer = 0;
-              console.log(this.currentDealer + "else if");
             } else {
               this.currentDealer++;
-              console.log(this.currentDealer + "else");
             }
             this.players[this.currentDealer].dealer = true;
           },
@@ -245,6 +279,10 @@
             }, 1000);
           },
           reset() {
+            if (this.buttonsDisabled) return;
+
+            this.buttonsDisabled = true;
+
             setTimeout(() => {
               this.isDealer();
               this.currentPhase = this.phases.START;
@@ -253,7 +291,8 @@
               this.winner = null;
               this.output = "";
               this.players = [];
-            }, 1500);
+              this.buttonsDisabled = false;
+            }, 1000);
           },
         },
       })
@@ -310,10 +349,10 @@
           },
         })
         .component("start", {
-          props: ["players"],
+          props: ["players", "disabled", "transitioning"],
           inheritAttrs: true,
           template: `<div class="btnWrapper">
-                <button v-if="players.length > 1"  @click="$emit('start-game')" class="startBtn">
+                <button v-if="players.length > 1" @click="$emit('start-game')" class="startBtn" :disabled="disabled || transitioning">
                   Start
                 </button>
               </div>`,
