@@ -69,7 +69,7 @@
             @select-player="setCurrentPlayer"
             class="playerList"
           ></player-list>
-          <p>
+          <p class="addScore">
             Add score to:
             <span class="currentPlayer" v-if="currentPlayer !== null"
               >{{players[currentPlayer].name}}</span
