@@ -3,6 +3,7 @@
 
 .primary-color {
     background-color: #1b4332;
+    min-height: 650px;
     padding-bottom: 2rem;
 }
 
