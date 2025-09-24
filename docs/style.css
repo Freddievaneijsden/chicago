@@ -134,7 +134,7 @@ button:active {
 .currentPlayer {
     color: #ffd700;
     font-weight: bold;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     padding: 0.0rem 0.4rem;
 }
 
@@ -150,6 +150,7 @@ button:active {
 .winningPhrase {
     margin: 0, 10%;
     width: 100%;
+    text-align: center;
 }
 
 .highlightScore {
@@ -240,6 +241,11 @@ button:hover {
     font-weight: bold;
 }
 
+input {
+    width: 25%;
+    margin-bottom: 2%;
+}
+
 .current:hover {
     font-weight: bold;
     color: #ffd700;
@@ -248,6 +254,12 @@ button:hover {
 button:active {
   background-color:  #ffd700; 
   transform: translateY(1px);
+}
+
+.btnWrapper {
+  display: flex;
+  justify-content: center;
+  margin: 2% 10%;
 }
 
   .grid-container {
