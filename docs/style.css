@@ -36,15 +36,13 @@ h2 {
 
 p {
     font-family: "Lora", serif;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color: #f8f0e3;
-    text-align: center;
-    width: 80%;
 }
 
 ul {
     font-family: "Lora", serif;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color: #f8f0e3;
     list-style-type: none;   
 }
@@ -77,18 +75,6 @@ input {
 
 .inputWrapper {
     text-align: center;
-}
-
-.playerList {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    width: 100%;
-    justify-items: center;
-    align-items: center;
-}
-
-.playerList p {
-  text-align: center;
 }
 
 .output {
@@ -129,6 +115,7 @@ input {
 
 .addScore {
     width: 100%;
+    text-align: center;
 }
 
 .resetBtn {
@@ -153,6 +140,7 @@ button:active {
 
 .score {
     padding: 0.0rem 0.4rem;
+     text-align: right;
 }
 
 .currentPlayer:hover {
@@ -193,7 +181,42 @@ button:active {
 .chip {
     width: 20px;
     height: 20px;
-    margin-right: 2%;
+}
+
+.chip-wrapper {
+  width: 20px; 
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.player-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.5rem auto;
+  max-width: 320px;        
+  padding: 0.5rem 1rem;     
+  border-radius: 12px;      
+  background-color: rgba(0, 0, 0, 0.25); 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
+  cursor: pointer;
+}
+
+.player-name {
+  text-align: left;
+}
+
+.player-info {
+  display: flex;
+  justify-content: space-between; 
+  flex: 1; 
+  padding-left: 0.3rem;
+}
+
+.playerList {
+    text-align: center;
 }
 
 .fade-enter-active, .fade-leave-active {
@@ -231,5 +254,6 @@ button:active {
 
   .grid-container {
   grid-template-columns: repeat(3, 1fr);
+ margin: 2% 25%;
 }
 }
