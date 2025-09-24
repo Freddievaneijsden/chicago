@@ -296,7 +296,7 @@
         .component("player-list", {
           props: ["players", "currentPlayer", "changeScore"],
           inheritAttrs: true,
-          template: `<div class="playerList">
+          template: `<div>
     <p v-for="(player, index) in players" :key="index" :class="{current: true}"
        @click="$emit('select-player', index)" class="player-row"> <span class="chip-wrapper"> <img src="images/poker-chip-svgrepo-com.svg" alt="Dealer" v-if="player.dealer" class="chip"/> </span>
          <span class="player-info"> <span class="player-info">{{player.name}}</span>

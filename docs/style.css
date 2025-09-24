@@ -155,8 +155,10 @@ button:active {
 .highlightScore {
     color: #ffd700;
     font-weight: bold;
-    font-size: 1.8rem;
     transition: all 0.3s ease;
+    display: inline-block; 
+    transform: scale(1.4); 
+    
 }
 
 .current:active {
@@ -213,10 +215,6 @@ button:active {
   justify-content: space-between; 
   flex: 1; 
   padding-left: 0.3rem;
-}
-
-.playerList {
-    text-align: center;
 }
 
 .fade-enter-active, .fade-leave-active {
