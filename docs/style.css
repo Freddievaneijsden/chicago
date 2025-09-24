@@ -101,6 +101,25 @@ input {
   margin: 7% 10%;
 }
 
+.specialBtn {
+    padding: 2rem 2rem;
+    color: #2b2b2b;
+    font-weight: bold;
+    box-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700, 0 0 30px #ffd700;
+    animation: shine 1.5s infinite alternate;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.failureBtn {
+    padding: 2rem 2rem;
+    color: #f8f0e3; 
+    font-weight: bold;
+    background-color: #a8263b; 
+    box-shadow: 0 0 10px #a8263b, 0 0 20px #a8263b, 0 0 30px #a8263b;
+    animation: fail-shine 1.5s infinite alternate;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
 .phaseRounds, 
 .phaseStart,
 .phaseTrick {

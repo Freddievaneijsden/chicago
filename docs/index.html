@@ -49,12 +49,42 @@
           </p>
           <div class="grid-container">
             <button
-              v-for="(value, index) in values.slice(0, -1)"
+              v-for="(value, index) in values.slice(0, -3)"
               :key="index"
               @click="addScore(index)"
               :disabled="buttonsDisabled || transitioning"
             >
               {{values[index].name}}
+            </button>
+          </div>
+        </section>
+        <section v-if="currentPhase===phases.CHICAGO" key="chicago">
+          <player-list
+            :players="players"
+            :current-player="currentPlayer"
+            :change-score="changeScore"
+            @select-player="setCurrentPlayer"
+          ></player-list>
+          <p class="addScore">
+            Add score to:
+            <span class="currentPlayer" v-if="currentPlayer !== null"
+              >{{players[currentPlayer].name}}</span
+            >
+          </p>
+          <div class="btnWrapper">
+            <button
+              @click="addScore(9)"
+              :disabled="buttonsDisabled || transitioning"
+              class="specialBtn"
+            >
+              {{values[9].name}}
+            </button>
+            <button
+              @click="addScore(10)"
+              :disabled="buttonsDisabled || transitioning"
+              class="failureBtn"
+            >
+              {{values[10].name}}
             </button>
           </div>
         </section>
@@ -76,6 +106,7 @@
             <button
               @click="addScore(8)"
               :disabled="buttonsDisabled || transitioning"
+              class="specialBtn"
             >
               {{values[8].name}}
             </button>
@@ -122,6 +153,7 @@
               START: "start",
               ROUND: "round",
               TRICK: "trick",
+              CHICAGO: "chicago",
               FINISHED: "finished",
             },
             currentPhase: "start",
@@ -164,6 +196,14 @@
                 name: "Trick (5)",
                 points: 5,
               },
+              {
+                name: "Success (15)",
+                points: 15,
+              },
+              {
+                name: "Failure (-15)",
+                points: -15,
+              },
             ],
             winner: null,
             output: "",
@@ -171,6 +211,7 @@
             changeScore: false,
             buttonsDisabled: false,
             transitioning: false,
+            isChicago: false,
           };
         },
         methods: {
@@ -220,14 +261,22 @@
                 if (this.currentRound === 1) {
                   this.currentRound++;
                 } else if (this.currentRound === 2) {
-                  this.currentPhase = this.phases.TRICK;
-                  this.currentRound++;
+                  this.isChicago = confirm(
+                    "Round 2 has ended. Does anyone wish to call Chicago?"
+                  );
+                  if (this.isChicago) {
+                    this.currentPhase = this.phases.CHICAGO;
+                  } else {
+                    this.currentPhase = this.phases.TRICK;
+                  }
                 } else if (this.currentRound === 3) {
                   this.checkWinner();
                 }
               } else if (this.currentPhase === this.phases.TRICK) {
                 this.currentPhase = this.phases.ROUND;
-                this.currentRound = 3;
+                this.currentRound++;
+              } else if (this.currentPhase === this.phases.CHICAGO) {
+                this.checkWinner();
               }
 
               this.transitioning = false;
