@@ -134,9 +134,19 @@
               Reset
             </button>
           </div>
-          <ul>
-            <li v-for="player in players">{{player.name}}: {{player.score}}</li>
-          </ul>
+          <div>
+            <ul class="results-list">
+              <li v-for="player in players" :key="player.name">
+                <strong>{{ player.name }}</strong>
+                <div>Score: <span>{{ player.score }}</span></div>
+                <div>
+                  Chicago → ✅ {{ player.calledChicago.successes }} | ❌ {{
+                  player.calledChicago.failures }}
+                </div>
+                <br />
+              </li>
+            </ul>
+          </div>
         </section>
       </transition>
     </div>
@@ -241,6 +251,14 @@
 
               player.score += currentValue.points;
               player.values.push(currentValue);
+
+              let chicagoSuccess = 9;
+              let chicagoFailure = 10;
+              if (valueIndex === chicagoSuccess) {
+                player.calledChicago.successes++;
+              } else if (valueIndex === chicagoFailure) {
+                player.calledChicago.failures++;
+              }
 
               this.showScoring();
               this.nextPhase();
@@ -350,32 +368,32 @@
           props: ["players", "currentPlayer", "changeScore"],
           inheritAttrs: true,
           template: `<div>
-    <p v-for="(player, index) in players" :key="index" :class="{current: true}"
-       @click="$emit('select-player', index)" class="player-row"> <span class="chip-wrapper"> <img src="images/poker-chip-svgrepo-com.svg" alt="Dealer" v-if="player.dealer" class="chip"/> </span>
-         <span class="player-info"> <span class="player-info">{{player.name}}</span>
-       <span class="score" :class="{highlightScore: changeScore && index === currentPlayer}">{{player.score}}</span>
-       </span>
-    </p>
-  </div>`,
+        <p v-for="(player, index) in players" :key="index" :class="{current: true}"
+           @click="$emit('select-player', index)" class="player-row"> <span class="chip-wrapper"> <img src="images/poker-chip-svgrepo-com.svg" alt="Dealer" v-if="player.dealer" class="chip"/> </span>
+             <span class="player-info"> <span class="player-info">{{player.name}}</span>
+           <span class="score" :class="{highlightScore: changeScore && index === currentPlayer}">{{player.score}}</span>
+           </span>
+        </p>
+      </div>`,
         })
         .component("add-players", {
           props: ["players", "header"],
           inheritAttrs: true,
           template: `<div class="inputWrapper">
-                <h2>{{header}}</h2>
-              <input
-                v-model.trim="playerName"
-                placeholder="Name"
-                @keyup.enter="addPlayer"
-                @input="playerName = $event.target.value"
-                maxlength="15"
-              />
-              <button v-if="playerName.length > 0" @click="addPlayer">Ok</button>
-              <div class="outputWrapper">
-              <p class="output">{{output}}</p>
-               </div>
-              </div>
-                `,
+                    <h2>{{header}}</h2>
+                  <input
+                    v-model.trim="playerName"
+                    placeholder="Name"
+                    @keyup.enter="addPlayer"
+                    @input="playerName = $event.target.value"
+                    maxlength="15"
+                  />
+                  <button v-if="playerName.length > 0" @click="addPlayer">Ok</button>
+                  <div class="outputWrapper">
+                  <p class="output">{{output}}</p>
+                   </div>
+                  </div>
+                    `,
           data() {
             return {
               playerName: "",
@@ -396,6 +414,10 @@
                   values: [],
                   score: 0,
                   dealer: false,
+                  calledChicago: {
+                    successes: 0,
+                    failures: 0,
+                  },
                 });
                 this.playerName = "";
               }
@@ -406,10 +428,10 @@
           props: ["players", "disabled", "transitioning"],
           inheritAttrs: true,
           template: `<div class="btnWrapper">
-                <button v-if="players.length > 1" @click="$emit('start-game')" class="startBtn" :disabled="disabled || transitioning">
-                  Start
-                </button>
-              </div>`,
+                    <button v-if="players.length > 1" @click="$emit('start-game')" class="startBtn" :disabled="disabled || transitioning">
+                      Start
+                    </button>
+                  </div>`,
         })
         .mount("#app");
     </script>
