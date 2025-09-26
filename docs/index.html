@@ -236,8 +236,12 @@
             this.buttonsDisabled = true;
 
             setTimeout(() => {
-              this.players[this.currentPlayer].score +=
-                this.values[valueIndex].points;
+              let currentValue = this.values[valueIndex];
+              let player = this.players[this.currentPlayer];
+
+              player.score += currentValue.points;
+              player.values.push(currentValue);
+
               this.showScoring();
               this.nextPhase();
 
@@ -389,6 +393,7 @@
                 this.output = "";
                 this.players.push({
                   name: name,
+                  values: [],
                   score: 0,
                   dealer: false,
                 });
