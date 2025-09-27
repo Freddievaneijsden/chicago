@@ -49,12 +49,6 @@
             :change-score="changeScore"
             @select-player="setCurrentPlayer"
           ></player-list>
-          <p class="addScore">
-            Add score to:
-            <span class="currentPlayer" v-if="currentPlayer !== null"
-              >{{players[currentPlayer].name}}</span
-            >
-          </p>
           <div class="grid-container">
             <button
               v-for="(value, index) in values.slice(0, -3)"
@@ -73,12 +67,6 @@
             :change-score="changeScore"
             @select-player="setCurrentPlayer"
           ></player-list>
-          <p class="addScore">
-            Add score to:
-            <span class="currentPlayer" v-if="currentPlayer !== null"
-              >{{players[currentPlayer].name}}</span
-            >
-          </p>
           <div class="btnWrapper">
             <button
               @click="addScore(9)"
@@ -104,12 +92,6 @@
             :change-score="changeScore"
             @select-player="setCurrentPlayer"
           ></player-list>
-          <p class="addScore">
-            Add score to:
-            <span class="currentPlayer" v-if="currentPlayer !== null"
-              >{{players[currentPlayer].name}}</span
-            >
-          </p>
           <div class="btnWrapper">
             <button
               @click="addScore(8)"
@@ -326,10 +308,10 @@
               }
             });
             if (
-              highestPoint >= winningThreshhold && this.callChicagoOnceToWin
-                ? this.players[playerIndex].calledChicago.successes > 0 ||
-                  this.players[playerIndex].calledChicago.failures > 0
-                : true
+              highestPoint >= winningThreshhold &&
+              (!this.callChicagoOnceToWin ||
+                this.players[playerIndex].calledChicago.successes > 0 ||
+                this.players[playerIndex].calledChicago.failures > 0)
             ) {
               this.currentPhase = this.phases.FINISHED;
               this.winner = {
@@ -384,7 +366,7 @@
           props: ["players", "currentPlayer", "changeScore"],
           inheritAttrs: true,
           template: `<div>
-        <p v-for="(player, index) in players" :key="index" :class="{current: true}"
+        <p v-for="(player, index) in players" :key="index" :class="{current: index === currentPlayer}"
            @click="$emit('select-player', index)" class="player-row"> <span class="chip-wrapper"> <img src="images/poker-chip-svgrepo-com.svg" alt="Dealer" v-if="player.dealer" class="chip"/> </span>
              <span class="player-info"> <span class="player-info">{{player.name}}</span>
            <span class="score" :class="{highlightScore: changeScore && index === currentPlayer}">{{player.score}}</span>

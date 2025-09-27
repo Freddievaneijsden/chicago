@@ -69,7 +69,6 @@ input {
     font-family: "Lora", serif;
     font-size: 1.5rem;
     border-radius: 2px;
-    margin-bottom: 5%;
     width: 50%;
 }
 
@@ -132,11 +131,6 @@ input {
   margin-bottom: 5%;
 }
 
-.addScore {
-    width: 100%;
-    text-align: center;
-}
-
 .resetBtn {
   display: flex;
   justify-content: center;
@@ -146,7 +140,7 @@ input {
 }
 
 button:active {
-  background-color:  #ffd700; 
+  background-color: #ffd700; 
   transform: translateY(1px);
 }
 
@@ -160,10 +154,6 @@ button:active {
 .score {
     padding: 0.0rem 0.4rem;
      text-align: right;
-}
-
-.currentPlayer:hover {
-    color: #c5a028;
 }
 
 .winningPhrase {
@@ -181,11 +171,15 @@ button:active {
     
 }
 
-.current:active {
+.current {
     color: #ffd700;
     font-weight: bold;
     border: solid;
     padding: 0.3rem 0.6rem;
+}
+
+.current:active {
+    color: #d4af37;
 }
 
 .grid-container {
@@ -254,6 +248,13 @@ button:active {
   accent-color: #d4af37;
 }
 
+.player-row {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.player-row:active {
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+}
 
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.5s ease; 
@@ -269,6 +270,16 @@ button:active {
 /* Tablet */
 @media screen and (min-width: 768px), (max-width: 1023px) and (orientation: landscape) {
 
+  .current:hover {
+    font-weight: bold;
+    color: #d4af37;
+}
+
+.player-row:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+}
+  
 }
 
 /* Desktop */
@@ -285,7 +296,12 @@ input {
 
 .current:hover {
     font-weight: bold;
-    color: #ffd700;
+    color: #d4af37;
+}
+
+.player-row:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
 }
 
 button:active {
