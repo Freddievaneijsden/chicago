@@ -237,6 +237,24 @@ button:active {
   padding-left: 0.3rem;
 }
 
+.checkbox-container {
+  display: flex;
+  justify-content: center; 
+  gap: 0.5rem;            
+  font-family: "Lora", serif; 
+  font-size: 1.2rem;  
+  color: #f8f0e3;   
+  margin-top: 15%;
+}
+
+.checkbox-container input[type="checkbox"] {
+  width: 1.2rem;   
+  height: 1.2rem;
+  cursor: pointer;
+  accent-color: #d4af37;
+}
+
+
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.5s ease; 
 }
@@ -284,5 +302,9 @@ button:active {
   .grid-container {
   grid-template-columns: repeat(3, 1fr);
  margin: 2% 25%;
+}
+
+.checkbox-container { 
+  margin-top: 3%;
 }
 }

@@ -27,6 +27,14 @@
             :transitioning="transitioning"
             @start-game="started"
           ></start>
+
+          <label class="checkbox-container">
+            <input type="checkbox" v-model="callChicagoOnceToWin" />
+            <span>
+              {{ callChicagoOnceToWin ? `Call Chicago once to win` : `No Chicago
+              needed to win` }}
+            </span>
+          </label>
         </section>
         <section
           v-if="currentPhase===phases.ROUND"
@@ -222,6 +230,7 @@
             buttonsDisabled: false,
             transitioning: false,
             isChicago: false,
+            callChicagoOnceToWin: false,
           };
         },
         methods: {
@@ -308,13 +317,20 @@
             let winningThreshhold = 52;
             let highestPoint = 0;
             let winnerName = "";
-            this.players.forEach((player) => {
+            let playerIndex = "";
+            this.players.forEach((player, index) => {
               if (player.score > highestPoint) {
                 highestPoint = player.score;
                 winnerName = player.name;
+                playerIndex = index;
               }
             });
-            if (highestPoint >= winningThreshhold) {
+            if (
+              highestPoint >= winningThreshhold && this.callChicagoOnceToWin
+                ? this.players[playerIndex].calledChicago.successes > 0 ||
+                  this.players[playerIndex].calledChicago.failures > 0
+                : true
+            ) {
               this.currentPhase = this.phases.FINISHED;
               this.winner = {
                 name: winnerName,
