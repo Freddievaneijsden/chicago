@@ -121,8 +121,10 @@ input {
 
 .phaseRounds, 
 .phaseStart,
-.phaseTrick {
-    margin: 0% 5%;
+.phaseTrick,
+.phaseChicago,
+.phaseFinished {
+    margin: 7% 5%;
 }
 
 .startBtn {

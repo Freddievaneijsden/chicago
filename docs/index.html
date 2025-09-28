@@ -10,7 +10,11 @@
     <div id="app" class="primary-color">
       <h1>Chicago</h1>
       <transition name="fade" mode="out-in">
-        <section v-if="currentPhase===phases.START" key="start">
+        <section
+          v-if="currentPhase===phases.START"
+          key="start"
+          class="phaseStart"
+        >
           <add-players
             :players="players"
             header="Add players"
@@ -60,7 +64,11 @@
             </button>
           </div>
         </section>
-        <section v-if="currentPhase===phases.CHICAGO" key="chicago">
+        <section
+          v-if="currentPhase===phases.CHICAGO"
+          key="chicago"
+          class="phaseChicago"
+        >
           <player-list
             :players="players"
             :current-player="currentPlayer"
@@ -84,7 +92,11 @@
             </button>
           </div>
         </section>
-        <section v-if="currentPhase===phases.TRICK" key="trick">
+        <section
+          v-if="currentPhase===phases.TRICK"
+          key="trick"
+          class="phaseTrick"
+        >
           <h2>{{phases.TRICK}}</h2>
           <player-list
             :players="players"
@@ -102,7 +114,11 @@
             </button>
           </div>
         </section>
-        <section v-if="currentPhase===phases.FINISHED" key="finished">
+        <section
+          v-if="currentPhase===phases.FINISHED"
+          key="finished"
+          class="phaseFinished"
+        >
           <h2 class="gameOver">Game Over</h2>
           <p class="winningPhrase">
             The winner is
