@@ -15,11 +15,7 @@
           key="start"
           class="phaseStart"
         >
-          <add-players
-            :players="players"
-            header="Add players"
-            class="phaseStart"
-          ></add-players>
+          <add-players :players="players"></add-players>
           <player-list
             :players="players"
             :current-player="currentPlayer"
@@ -391,22 +387,21 @@
       </div>`,
         })
         .component("add-players", {
-          props: ["players", "header"],
+          props: ["players"],
           inheritAttrs: true,
           template: `<div class="inputWrapper">
-                    <h2>{{header}}</h2>
                   <input
                     v-model.trim="playerName"
-                    placeholder="Name"
+                    placeholder="Add player"
                     @keyup.enter="addPlayer"
                     @input="playerName = $event.target.value"
                     maxlength="15"
                   />
                   <button v-if="playerName.length > 0" @click="addPlayer">Ok</button>
+                  </div>
                   <div class="outputWrapper">
                   <p class="output">{{output}}</p>
                    </div>
-                  </div>
                     `,
           data() {
             return {

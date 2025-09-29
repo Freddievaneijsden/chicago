@@ -54,8 +54,6 @@ button {
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    margin-bottom: 5%;
-    margin-left: 2%;
     background-color: #d4af37;
     color: #2b2b2b;
 }
@@ -67,13 +65,16 @@ button:disabled {
 
 input {
     font-family: "Lora", serif;
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     border-radius: 2px;
-    width: 50%;
+    background-color: #f8f0e3;
+    width: 60%;
 }
 
 .inputWrapper {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
 }
 
 .output {
@@ -281,6 +282,10 @@ button:active {
     transform: scale(1.03);
     box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
 }
+
+input {
+    width: 35%;
+}
   
 }
 
@@ -293,7 +298,6 @@ button:hover {
 
 input {
     width: 25%;
-    margin-bottom: 2%;
 }
 
 .current:hover {
