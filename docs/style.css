@@ -1,6 +1,10 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
 
+/* ===============================
+   COLOR
+=================================*/
+
 .primary-color {
     background-color: #1b4332;
     min-height: 650px;
@@ -19,33 +23,80 @@
     color: #f8f0e3;
 }
 
-h1 {
-    font-family: "Cinzel";
-    text-align: center;
-    font-size: 2.5rem;
-    padding-top: 10%;
-     color: #f8f0e3;
-}
+/* ===============================
+   BASE
+=================================*/
 
-h2 {
+h1, h2 {
     font-family: "Cinzel";
-    font-size: 1.7rem;
     text-align: center;
     color: #f8f0e3;
 }
 
-p {
+h1 {
+    font-size: 2.5rem;
+    padding-top: 7%;
+}
+
+h2 {
+    font-size: 1.7rem;
+}
+
+p, ul {
     font-family: "Lora", serif;
     font-size: 1.2rem;
     color: #f8f0e3;
 }
 
 ul {
-    font-family: "Lora", serif;
-    font-size: 1.2rem;
-    color: #f8f0e3;
     list-style-type: none;   
 }
+
+input {
+    font-family: "Lora", serif;
+    font-size: 1.7rem;
+    border-radius: 2px;
+    background-color: #f8f0e3;
+    width: 60%;
+    padding: 0;
+}
+
+.output {
+    font-family: "Lora", serif;
+    color: #a8263b;
+    font-size: 1.2rem;
+}
+
+.resetOutput {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #a8263b;
+    text-align: center;
+}
+
+.score {
+    padding: 0.0rem 0.4rem;
+     text-align: right;
+}
+
+.winningPhrase {
+    width: 100%;
+    text-align: center;
+}
+
+.dealer, 
+.gameOver {
+    color: #a8263b;
+}
+
+.chip {
+    width: 20px;
+    height: 20px;
+}
+
+/* ===============================
+   BUTTON
+=================================*/
 
 button {
     font-family: "Cinzel", serif;
@@ -63,47 +114,8 @@ button:disabled {
   cursor: not-allowed;
 }
 
-input {
-    font-family: "Lora", serif;
-    font-size: 1.7rem;
-    border-radius: 2px;
-    background-color: #f8f0e3;
-    width: 60%;
-    padding: 0;
-}
-
-.inputWrapper {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-
 .inputWrapper button {
       padding: 0.8rem 1.2rem;
-}
-
-.output {
-    font-family: "Lora", serif;
-    color: #a8263b;
-    font-size: 1.2rem;
-}
-
-.outputWrapper {
-  display: flex;
-  justify-content: center;
-}
-
-.resetOutput {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #a8263b;
-    text-align: center;
-}
-
-.btnWrapper {
-  display: flex;
-  justify-content: center;
-  margin: 7% 10%;
 }
 
 .specialBtn {
@@ -125,14 +137,6 @@ input {
     transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
-.phaseRounds, 
-.phaseStart,
-.phaseTrick,
-.phaseChicago,
-.phaseFinished {
-    margin: 7% 5%;
-}
-
 .startBtn {
   font-size: 1.2rem;
   font-weight: bold;
@@ -147,11 +151,6 @@ input {
   margin: 2% 4%;
 }
 
-button:active {
-  background-color: #ffd700; 
-  transform: translateY(1px);
-}
-
 .currentPlayer {
     color: #ffd700;
     font-weight: bold;
@@ -159,16 +158,87 @@ button:active {
     padding: 0.0rem 0.4rem;
 }
 
-.score {
-    padding: 0.0rem 0.4rem;
-     text-align: right;
+/* ===============================
+   LAYOUT
+=================================*/
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin: 7% 10%;
+  grid-auto-rows: 1fr; 
 }
 
-.winningPhrase {
-    margin: 0, 10%;
-    width: 100%;
-    text-align: center;
+.player-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.5rem auto;
+  max-width: 320px;        
+  padding: 0.5rem 1rem;     
+  border-radius: 12px;      
+  background-color: rgba(0, 0, 0, 0.25); 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
+  cursor: pointer;
 }
+
+.checkbox-container {
+  display: flex;
+  justify-content: center; 
+  gap: 0.5rem;            
+  font-family: "Lora", serif; 
+  font-size: 1.2rem;  
+  color: #f8f0e3;   
+  margin-top: 15%;
+}
+
+.outputWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.inputWrapper {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btnWrapper {
+  display: flex;
+  justify-content: center;
+  margin: 7% 10%;
+}
+
+.chip-wrapper {
+  width: 20px; 
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phase {
+    margin: 0 5%;
+}
+
+.player-info {
+  display: flex;
+  justify-content: space-between; 
+  flex: 1; 
+  padding-left: 0.3rem;
+}
+
+.checkbox-container input[type="checkbox"] {
+  width: 1.2rem;   
+  height: 1.2rem;
+  cursor: pointer;
+  accent-color: #d4af37;
+}
+
+/* ===============================
+   EFFECTS
+=================================*/
 
 .highlightScore {
     color: #ffd700;
@@ -190,80 +260,19 @@ button:active {
     color: #d4af37;
 }
 
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  margin: 7% 10%;
-  grid-auto-rows: 1fr; 
+button:active {
+  background-color: #ffd700; 
+  transform: translateY(1px);
 }
 
-.dealer, 
-.gameOver {
-    color: #a8263b;
-}
-
-.chip {
-    width: 20px;
-    height: 20px;
-}
-
-.chip-wrapper {
-  width: 20px; 
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.player-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0.5rem auto;
-  max-width: 320px;        
-  padding: 0.5rem 1rem;     
-  border-radius: 12px;      
-  background-color: rgba(0, 0, 0, 0.25); 
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
-  cursor: pointer;
-}
-
-.player-name {
-  text-align: left;
-}
-
-.player-info {
-  display: flex;
-  justify-content: space-between; 
-  flex: 1; 
-  padding-left: 0.3rem;
-}
-
-.checkbox-container {
-  display: flex;
-  justify-content: center; 
-  gap: 0.5rem;            
-  font-family: "Lora", serif; 
-  font-size: 1.2rem;  
-  color: #f8f0e3;   
-  margin-top: 15%;
-}
-
-.checkbox-container input[type="checkbox"] {
-  width: 1.2rem;   
-  height: 1.2rem;
-  cursor: pointer;
-  accent-color: #d4af37;
-}
-
-.player-row {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
 .player-row:active {
     transform: scale(1.03);
     box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
 }
+
+/* ===============================
+   TRANSITION
+=================================*/
 
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.5s ease; 
@@ -279,7 +288,11 @@ button:active {
 /* Tablet */
 @media screen and (min-width: 768px), (max-width: 1023px) and (orientation: landscape) {
 
-  .current:hover {
+h1 {
+    padding-top: 4%;
+}
+
+.current:hover {
     font-weight: bold;
     color: #d4af37;
 }
@@ -298,7 +311,7 @@ button {
     font-size: 1.0rem;
 }
 
-  .grid-container {
+.grid-container {
   grid-template-columns: repeat(3, 1fr);
     margin: 5% 13%;
 }
@@ -307,6 +320,11 @@ button {
 
 /* Desktop */
 @media (min-width: 1024px) {
+
+h1 {
+    padding-top: 3%;
+}
+
 button:hover {
     background-color: #c5a028;
     font-weight: bold;
@@ -331,18 +349,13 @@ button {
     box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
 }
 
-button:active {
-  background-color:  #ffd700; 
-  transform: translateY(1px);
-}
-
 .btnWrapper {
   display: flex;
   justify-content: center;
   margin: 2% 10%;
 }
 
-  .grid-container {
+.grid-container {
   grid-template-columns: repeat(3, 1fr);
   margin: 5% 20%;
 }
