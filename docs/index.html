@@ -55,15 +55,12 @@
               {{values[index].name}}
             </button>
           </div>
-          <div class="btnWrapper">
-            <button
-              @click="revertLastScore"
-              :disabled="lastScore==null"
-              class="startBtn"
-            >
-              Revert
-            </button>
-          </div>
+          <revert-score
+            :current-phase="currentPhase"
+            :phases="phases"
+            :last-score="lastScore"
+            @revert-last-score="revertLastScore"
+          ></revert-score>
         </section>
         <section
           v-if="currentPhase===phases.CHICAGO"
@@ -93,15 +90,12 @@
               {{values[10].name}}
             </button>
           </div>
-          <div class="btnWrapper">
-            <button
-              @click="revertLastScore"
-              :disabled="lastScore==null"
-              class="startBtn"
-            >
-              Revert
-            </button>
-          </div>
+          <revert-score
+            :current-phase="currentPhase"
+            :phases="phases"
+            :last-score="lastScore"
+            @revert-last-score="revertLastScore"
+          ></revert-score>
         </section>
         <section v-if="currentPhase===phases.TRICK" key="trick" class="phase">
           <h1>{{phases.TRICK}}</h1>
@@ -120,15 +114,12 @@
               {{values[8].name}}
             </button>
           </div>
-          <div class="btnWrapper">
-            <button
-              @click="revertLastScore"
-              :disabled="lastScore==null"
-              class="startBtn"
-            >
-              Revert
-            </button>
-          </div>
+          <revert-score
+            :current-phase="currentPhase"
+            :phases="phases"
+            :last-score="lastScore"
+            @revert-last-score="revertLastScore"
+          ></revert-score>
         </section>
         <section
           v-if="currentPhase===phases.FINISHED"
@@ -490,6 +481,15 @@
                       Start
                     </button>
                   </div>`,
+        })
+        .component("revert-score", {
+          props: ["currentPhase", "phases", "lastScore"],
+          inheritAttrs: true,
+          template: `<div class="btnWrapper">
+                      <button @click="$emit('revert-last-score')" :disabled="!lastScore" class="startBtn">
+                        Revert
+                      </button>
+                     </div>`,
         })
         .mount("#app");
     </script>
