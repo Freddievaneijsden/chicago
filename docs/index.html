@@ -147,19 +147,7 @@
               Reset
             </button>
           </div>
-          <div>
-            <ul class="results-list">
-              <li v-for="player in players" :key="player.name">
-                <strong>{{ player.name }}</strong>
-                <div>Score: <span>{{ player.score }}</span></div>
-                <div>
-                  Chicago → ✅ {{ player.calledChicago.successes }} | ❌ {{
-                  player.calledChicago.failures }}
-                </div>
-                <br />
-              </li>
-            </ul>
-          </div>
+          <result-list :players="players"></result-list>
         </section>
       </transition>
     </div>
@@ -490,6 +478,23 @@
                         Revert
                       </button>
                      </div>`,
+        })
+        .component("result-list", {
+          props: ["players"],
+          inheritAttrs: true,
+          template: `<div>
+            <ul class="results-list">
+              <li v-for="player in players" :key="player.name">
+                <strong>{{ player.name }}</strong>
+                <div>Score: <span>{{ player.score }}</span></div>
+                <div>
+                  Chicago → ✅ {{ player.calledChicago.successes }} | ❌ {{
+                  player.calledChicago.failures }}
+                </div>
+                <br />
+              </li>
+            </ul>
+          </div>`,
         })
         .mount("#app");
     </script>
