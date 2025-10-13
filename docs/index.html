@@ -155,6 +155,7 @@
       import { PlayerList } from "./components/PlayerList.js";
       import { StartButton } from "./components/StartButton.js";
       import { AddPlayers } from "./components/AddPlayers.js";
+      import { RevertScore } from "./components/RevertScore.js";
 
       const { createApp } = Vue;
       createApp({
@@ -408,15 +409,7 @@
         .component("player-list", PlayerList)
         .component("add-players", AddPlayers)
         .component("start-button", StartButton)
-        .component("revert-score", {
-          props: ["currentPhase", "phases", "lastScore"],
-          inheritAttrs: true,
-          template: `<div class="btnWrapper">
-                      <button @click="$emit('revert-last-score')" :disabled="!lastScore" class="startBtn">
-                        Revert
-                      </button>
-                     </div>`,
-        })
+        .component("revert-score", RevertScore)
         .component("result-list", {
           props: ["players"],
           inheritAttrs: true,
