@@ -157,6 +157,7 @@
       import { AddPlayers } from "./components/AddPlayers.js";
       import { RevertScore } from "./components/RevertScore.js";
       import { ResultList } from "./components/ResultList.js";
+      import { checkWinner } from "./gameLogic.js";
 
       const { createApp } = Vue;
       createApp({
@@ -320,36 +321,7 @@
             }, 1000);
           },
           checkWinner() {
-            let winningThreshhold = 52;
-            let highestPoint = 0;
-            let winnerName = "";
-            let playerIndex = "";
-            this.players.forEach((player, index) => {
-              if (player.score > highestPoint) {
-                highestPoint = player.score;
-                winnerName = player.name;
-                playerIndex = index;
-              }
-            });
-            if (
-              highestPoint >= winningThreshhold &&
-              (!this.callChicagoOnceToWin ||
-                this.players[playerIndex].calledChicago.successes > 0 ||
-                this.players[playerIndex].calledChicago.failures > 0)
-            ) {
-              this.currentPhase = this.phases.FINISHED;
-              this.winner = {
-                name: winnerName,
-                score: highestPoint,
-              };
-            } else {
-              this.currentPhase = this.phases.ROUND;
-              this.currentRound = 1;
-              this.output = "New round - first to reach 52 wins!";
-              this.lastScore = null;
-              this.players[this.currentDealer].dealer = false;
-              this.isDealer();
-            }
+            checkWinner(this);
           },
           isDealer() {
             let playersLength = this.players.length;
