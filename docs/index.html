@@ -156,6 +156,7 @@
       import { StartButton } from "./components/StartButton.js";
       import { AddPlayers } from "./components/AddPlayers.js";
       import { RevertScore } from "./components/RevertScore.js";
+      import { ResultList } from "./components/ResultList.js";
 
       const { createApp } = Vue;
       createApp({
@@ -410,23 +411,7 @@
         .component("add-players", AddPlayers)
         .component("start-button", StartButton)
         .component("revert-score", RevertScore)
-        .component("result-list", {
-          props: ["players"],
-          inheritAttrs: true,
-          template: `<div>
-            <ul class="results-list">
-              <li v-for="player in players" :key="player.name">
-                <strong>{{ player.name }}</strong>
-                <div>Score: <span>{{ player.score }}</span></div>
-                <div>
-                  Chicago → ✅ {{ player.calledChicago.successes }} | ❌ {{
-                  player.calledChicago.failures }}
-                </div>
-                <br />
-              </li>
-            </ul>
-          </div>`,
-        })
+        .component("result-list", ResultList)
         .mount("#app");
     </script>
   </body>
