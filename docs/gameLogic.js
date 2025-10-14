@@ -31,3 +31,19 @@ export function checkWinner(game) {
               game.isDealer();
             }
 }
+
+export function resetGame(game) {
+              if (game.buttonsDisabled) return;
+
+              game.buttonsDisabled = true;
+
+
+              game.isDealer();
+              game.currentPhase = game.phases.START;
+              game.currentRound = 1;
+              game.currentPlayer = null;
+              game.winner = null;
+              game.output = "";
+              game.players = [];
+              game.buttonsDisabled = false;
+            }

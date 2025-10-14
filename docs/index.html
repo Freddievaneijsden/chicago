@@ -158,6 +158,7 @@
       import { RevertScore } from "./components/RevertScore.js";
       import { ResultList } from "./components/ResultList.js";
       import { checkWinner } from "./gameLogic.js";
+      import { resetGame } from "./gameLogic.js";
 
       const { createApp } = Vue;
       createApp({
@@ -342,19 +343,8 @@
             }, 1000);
           },
           reset() {
-            if (this.buttonsDisabled) return;
-
-            this.buttonsDisabled = true;
-
             setTimeout(() => {
-              this.isDealer();
-              this.currentPhase = this.phases.START;
-              this.currentRound = 1;
-              this.currentPlayer = null;
-              this.winner = null;
-              this.output = "";
-              this.players = [];
-              this.buttonsDisabled = false;
+              resetGame(this);
             }, 1000);
           },
           revertLastScore() {
