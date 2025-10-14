@@ -28,7 +28,7 @@ export function checkWinner(game) {
               game.output = "New round - first to reach 52 wins!";
               game.lastScore = null;
               game.players[game.currentDealer].dealer = false;
-              game.isDealer();
+              isDealer(game);
             }
 }
 
@@ -38,7 +38,7 @@ export function resetGame(game) {
               game.buttonsDisabled = true;
 
 
-              game.isDealer();
+              isDealer(game);
               game.currentPhase = game.phases.START;
               game.currentRound = 1;
               game.currentPlayer = null;
@@ -46,4 +46,17 @@ export function resetGame(game) {
               game.output = "";
               game.players = [];
               game.buttonsDisabled = false;
+}
+
+export function isDealer(game) {  
+            let playersLength = game.players.length;
+            let randNum = Math.floor(Math.random() * playersLength);
+            if (game.currentDealer === null) {
+              game.currentDealer = randNum;
+            } else if (game.currentDealer === playersLength - 1) {
+              game.currentDealer = 0;
+            } else {
+              game.currentDealer++;
             }
+            game.players[game.currentDealer].dealer = true;
+}

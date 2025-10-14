@@ -159,6 +159,7 @@
       import { ResultList } from "./components/ResultList.js";
       import { checkWinner } from "./gameLogic.js";
       import { resetGame } from "./gameLogic.js";
+      import { isDealer } from "./gameLogic.js";
 
       const { createApp } = Vue;
       createApp({
@@ -325,16 +326,7 @@
             checkWinner(this);
           },
           isDealer() {
-            let playersLength = this.players.length;
-            let randNum = Math.floor(Math.random() * playersLength);
-            if (this.currentDealer === null) {
-              this.currentDealer = randNum;
-            } else if (this.currentDealer === playersLength - 1) {
-              this.currentDealer = 0;
-            } else {
-              this.currentDealer++;
-            }
-            this.players[this.currentDealer].dealer = true;
+            isDealer(this);
           },
           showScoring() {
             this.changeScore = true;
