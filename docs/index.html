@@ -59,6 +59,8 @@
             :phases="phases"
             :last-score="lastScore"
             @revert-last-score="revertLastScore"
+            :disabled="buttonsDisabled"
+            :transitioning="transitioning"
           ></revert-score>
         </section>
         <section
@@ -94,6 +96,8 @@
             :phases="phases"
             :last-score="lastScore"
             @revert-last-score="revertLastScore"
+            :disabled="buttonsDisabled"
+            :transitioning="transitioning"
           ></revert-score>
         </section>
         <section v-if="currentPhase===phases.TRICK" key="trick" class="phase">
@@ -118,6 +122,8 @@
             :phases="phases"
             :last-score="lastScore"
             @revert-last-score="revertLastScore"
+            :disabled="buttonsDisabled"
+            :transitioning="transitioning"
           ></revert-score>
         </section>
         <section
@@ -311,24 +317,30 @@
             }, 1000);
           },
           revertLastScore() {
-            let lastValue = this.lastScore.value;
-            this.lastScore.player.score -= lastValue.points;
-            this.lastScore.player.values.pop();
-            this.lastScore = null;
+            if (this.buttonsDisabled) return;
+            this.buttonsDisabled = true;
 
-            if (this.currentPhase == this.phases.ROUND) {
-              if (this.currentRound == 2) {
-                this.currentRound = 1;
-              } else if (this.currentRound == 3) {
-                this.currentPhase = this.phases.TRICK;
+            setTimeout(() => {
+              let lastValue = this.lastScore.value;
+              this.lastScore.player.score -= lastValue.points;
+              this.lastScore.player.values.pop();
+              this.lastScore = null;
+
+              if (this.currentPhase == this.phases.ROUND) {
+                if (this.currentRound == 2) {
+                  this.currentRound = 1;
+                } else if (this.currentRound == 3) {
+                  this.currentPhase = this.phases.TRICK;
+                }
+              } else if (this.currentPhase == this.phases.TRICK) {
+                this.currentPhase = this.phases.ROUND;
+                this.currentRound = 2;
+              } else if (this.currentPhase == this.phases.CHICAGO) {
+                this.currentPhase = this.phases.ROUND;
+                this.currentRound = 2;
               }
-            } else if (this.currentPhase == this.phases.TRICK) {
-              this.currentPhase = this.phases.ROUND;
-              this.currentRound = 2;
-            } else if (this.currentPhase == this.phases.CHICAGO) {
-              this.currentPhase = this.phases.ROUND;
-              this.currentRound = 2;
-            }
+              this.buttonsDisabled = false;
+            }, 1000);
           },
         },
       })

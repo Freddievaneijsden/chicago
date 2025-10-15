@@ -1,7 +1,7 @@
 export const RevertScore = {
-props: ["currentPhase", "phases", "lastScore"],
+props: ["currentPhase", "phases", "lastScore", "disabled", "transitioning"],
 template: `<div class="btnWrapper">
-                      <button @click="$emit('revert-last-score')" :disabled="!lastScore" class="startBtn">
+                      <button @click="$emit('revert-last-score')" :disabled="!lastScore || (disabled || transitioning)" class="startBtn">
                         Revert
                       </button>
                      </div>`
