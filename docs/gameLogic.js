@@ -60,3 +60,36 @@ export function isDealer(game) {
             }
             game.players[game.currentDealer].dealer = true;
 }
+
+export function nextPhase(game) {
+              if (game.currentPhase === game.phases.FINISHED) {
+                game.currentPhase = game.phases.START;
+              }
+              if (game.currentPhase === game.phases.START) {
+                game.currentPhase = game.phases.ROUND;
+              } else if (game.currentPhase === game.phases.ROUND) {
+                if (game.currentRound === 1) {
+                  game.currentRound++;
+                } else if (game.currentRound === 2) {
+                  game.isChicago = confirm(
+                    "Round 2 has ended. Does anyone wish to call Chicago?"
+                  );
+                  if (game.isChicago) {
+                    game.currentPhase = game.phases.CHICAGO;
+                  } else {
+                    game.currentPhase = game.phases.TRICK;
+                  }
+                } else if (game.currentRound === 3) {
+                  checkWinner(game);
+                }
+              } else if (game.currentPhase === game.phases.TRICK) {
+                game.currentPhase = game.phases.ROUND;
+                if (game.currentRound < 3) {
+                  game.currentRound++;
+                }
+              } else if (game.currentPhase === game.phases.CHICAGO) {
+                checkWinner(game);
+              }
+
+              game.transitioning = false;
+}

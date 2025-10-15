@@ -160,6 +160,7 @@
       import { checkWinner } from "./gameLogic.js";
       import { resetGame } from "./gameLogic.js";
       import { isDealer } from "./gameLogic.js";
+      import { nextPhase } from "./gameLogic.js";
 
       const { createApp } = Vue;
       createApp({
@@ -288,38 +289,8 @@
           },
           nextPhase() {
             this.transitioning = true;
-
             setTimeout(() => {
-              if (this.currentPhase === this.phases.FINISHED) {
-                this.currentPhase = this.phases.START;
-              }
-              if (this.currentPhase === this.phases.START) {
-                this.currentPhase = this.phases.ROUND;
-              } else if (this.currentPhase === this.phases.ROUND) {
-                if (this.currentRound === 1) {
-                  this.currentRound++;
-                } else if (this.currentRound === 2) {
-                  this.isChicago = confirm(
-                    "Round 2 has ended. Does anyone wish to call Chicago?"
-                  );
-                  if (this.isChicago) {
-                    this.currentPhase = this.phases.CHICAGO;
-                  } else {
-                    this.currentPhase = this.phases.TRICK;
-                  }
-                } else if (this.currentRound === 3) {
-                  this.checkWinner();
-                }
-              } else if (this.currentPhase === this.phases.TRICK) {
-                this.currentPhase = this.phases.ROUND;
-                if (this.currentRound < 3) {
-                  this.currentRound++;
-                }
-              } else if (this.currentPhase === this.phases.CHICAGO) {
-                this.checkWinner();
-              }
-
-              this.transitioning = false;
+              nextPhase(this);
             }, 1000);
           },
           checkWinner() {
