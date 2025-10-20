@@ -1,3 +1,14 @@
+export function startGame(game) {
+        if (game.buttonsDisabled) return;
+            game.buttonsDisabled = true;
+
+              let randomNum = Math.floor(Math.random() * game.players.length);
+              game.currentPlayer = randomNum;
+              isDealer(game);
+
+            game.buttonsDisabled = false;
+}
+
 export function checkWinner(game) {
             let winningThreshhold = 52;
             let highestPoint = 0;
@@ -94,7 +105,7 @@ export function nextPhase(game) {
               game.transitioning = false;
 }
 
-export function revertLastScore (game) {
+export function revertLastScore(game) {
             if (game.buttonsDisabled) return;
               game.buttonsDisabled = true;
 
@@ -119,7 +130,7 @@ export function revertLastScore (game) {
               game.buttonsDisabled = false;
 }
 
-export function addScore (game, valueIndex) {
+export function addScore(game, valueIndex) {
           if (game.buttonsDisabled) return;
               game.buttonsDisabled = true;
 

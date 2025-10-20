@@ -21,7 +21,7 @@
             :players="players"
             :disabled="buttonsDisabled"
             :transitioning="transitioning"
-            @start-game="started"
+            @start-game="startGame"
           ></start-button>
           <label class="checkbox-container">
             <input type="checkbox" v-model="callChicagoOnceToWin" />
@@ -163,6 +163,7 @@
       import { AddPlayers } from "./components/AddPlayers.js";
       import { RevertScore } from "./components/RevertScore.js";
       import { ResultList } from "./components/ResultList.js";
+      import { startGame } from "./gameLogic.js";
       import { checkWinner } from "./gameLogic.js";
       import { resetGame } from "./gameLogic.js";
       import { isDealer } from "./gameLogic.js";
@@ -245,18 +246,10 @@
           };
         },
         methods: {
-          started() {
-            if (this.buttonsDisabled) return;
-
-            this.buttonsDisabled = true;
-
-            this.nextPhase();
+          startGame() {
             setTimeout(() => {
-              let randomNum = Math.floor(Math.random() * this.players.length);
-              this.currentPlayer = randomNum;
-              this.isDealer();
-
-              this.buttonsDisabled = false;
+              nextPhase(this);
+              startGame(this);
             }, 1000);
           },
 
