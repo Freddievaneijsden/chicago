@@ -1,7 +1,4 @@
 export function startGame(game) {
-        if (game.buttonsDisabled) return;
-            game.buttonsDisabled = true;
-
               let randomNum = Math.floor(Math.random() * game.players.length);
               game.currentPlayer = randomNum;
               isDealer(game);
@@ -44,11 +41,6 @@ export function checkWinner(game) {
 }
 
 export function resetGame(game) {
-              if (game.buttonsDisabled) return;
-
-              game.buttonsDisabled = true;
-
-
               isDealer(game);
               game.currentPhase = game.phases.START;
               game.currentRound = 1;
@@ -106,9 +98,6 @@ export function nextPhase(game) {
 }
 
 export function revertLastScore(game) {
-            if (game.buttonsDisabled) return;
-              game.buttonsDisabled = true;
-
               let lastValue = game.lastScore.value;
               game.lastScore.player.score -= lastValue.points;
               game.lastScore.player.values.pop();
@@ -131,9 +120,6 @@ export function revertLastScore(game) {
 }
 
 export function addScore(game, valueIndex) {
-          if (game.buttonsDisabled) return;
-              game.buttonsDisabled = true;
-
               let currentValue = game.values[valueIndex];
               let player = game.players[game.currentPlayer];
 

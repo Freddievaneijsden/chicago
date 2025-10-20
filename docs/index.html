@@ -247,13 +247,14 @@
         },
         methods: {
           startGame() {
+            this.disableButtons();
             setTimeout(() => {
               nextPhase(this);
               startGame(this);
             }, 1000);
           },
-
           addScore(valueIndex) {
+            this.disableButtons();
             setTimeout(() => {
               addScore(this, valueIndex);
             }, 1000);
@@ -280,14 +281,20 @@
             }, 1000);
           },
           reset() {
+            this.disableButtons();
             setTimeout(() => {
               resetGame(this);
             }, 1000);
           },
           revertLastScore() {
+            this.disableButtons();
             setTimeout(() => {
               revertLastScore(this);
             }, 1000);
+          },
+          disableButtons() {
+            if (this.buttonsDisabled) return;
+            this.buttonsDisabled = true;
           },
         },
       })
