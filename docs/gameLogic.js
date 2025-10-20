@@ -118,3 +118,36 @@ export function revertLastScore (game) {
               }
               game.buttonsDisabled = false;
 }
+
+export function addScore (game, valueIndex) {
+          if (game.buttonsDisabled) return;
+              game.buttonsDisabled = true;
+
+              let currentValue = game.values[valueIndex];
+              let player = game.players[game.currentPlayer];
+
+              player.score += currentValue.points;
+              player.values.push(currentValue);
+
+              game.lastScore = {
+                player: player,
+                value: currentValue,
+              };
+
+              countCalledChicago(valueIndex, player)
+              game.showScoring();
+              nextPhase(game);
+
+              game.buttonsDisabled = false;
+              game.output = "";
+}
+
+function countCalledChicago(valueIndex, player) {
+              let chicagoSuccess = 9;
+              let chicagoFailure = 10;
+              if (valueIndex === chicagoSuccess) {
+                player.calledChicago.successes++;
+              } else if (valueIndex === chicagoFailure) {
+                player.calledChicago.failures++;
+              }
+}

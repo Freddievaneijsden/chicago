@@ -168,6 +168,7 @@
       import { isDealer } from "./gameLogic.js";
       import { nextPhase } from "./gameLogic.js";
       import { revertLastScore } from "./gameLogic.js";
+      import { addScore } from "./gameLogic.js";
 
       const { createApp } = Vue;
       createApp({
@@ -260,36 +261,9 @@
           },
 
           addScore(valueIndex) {
-            if (this.buttonsDisabled) return;
-
-            this.buttonsDisabled = true;
-
             setTimeout(() => {
-              let currentValue = this.values[valueIndex];
-              let player = this.players[this.currentPlayer];
-
-              player.score += currentValue.points;
-              player.values.push(currentValue);
-
-              this.lastScore = {
-                player: player,
-                value: currentValue,
-              };
-
-              let chicagoSuccess = 9;
-              let chicagoFailure = 10;
-              if (valueIndex === chicagoSuccess) {
-                player.calledChicago.successes++;
-              } else if (valueIndex === chicagoFailure) {
-                player.calledChicago.failures++;
-              }
-
-              this.showScoring();
-              this.nextPhase();
-
-              this.buttonsDisabled = false;
+              addScore(this, valueIndex);
             }, 1000);
-            this.output = "";
           },
           setCurrentPlayer(index) {
             this.currentPlayer = index;
