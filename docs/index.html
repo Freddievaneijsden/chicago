@@ -25,10 +25,7 @@
           ></start-button>
           <label class="checkbox-container">
             <input type="checkbox" v-model="callChicagoOnceToWin" />
-            <span>
-              {{ callChicagoOnceToWin ? `Call Chicago once to win` : `No Chicago
-              needed to win` }}
-            </span>
+            <span> {{ chicagoRuleText }} </span>
           </label>
         </section>
         <section
@@ -244,6 +241,13 @@
             callChicagoOnceToWin: false,
             lastScore: null,
           };
+        },
+        computed: {
+          chicagoRuleText() {
+            return this.callChicagoOnceToWin
+              ? "Call Chicago once to win"
+              : "No Chicago needed to win";
+          },
         },
         methods: {
           startGame() {
