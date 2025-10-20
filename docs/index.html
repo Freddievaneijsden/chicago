@@ -169,19 +169,20 @@
       import { addScore } from "./gameLogic.js";
 
       const { createApp } = Vue;
+
       createApp({
         data() {
           return {
             playerName: "",
             players: [],
             currentPlayer: null,
-            phases: {
+            phases: Object.freeze({
               START: "start",
               ROUND: "round",
               TRICK: "trick",
               CHICAGO: "chicago",
               FINISHED: "finished",
-            },
+            }),
             currentPhase: "start",
             currentRound: 1,
             values: [
