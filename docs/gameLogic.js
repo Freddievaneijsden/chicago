@@ -93,3 +93,28 @@ export function nextPhase(game) {
 
               game.transitioning = false;
 }
+
+export function revertLastScore (game) {
+            if (game.buttonsDisabled) return;
+              game.buttonsDisabled = true;
+
+              let lastValue = game.lastScore.value;
+              game.lastScore.player.score -= lastValue.points;
+              game.lastScore.player.values.pop();
+              game.lastScore = null;
+
+            if (game.currentPhase == game.phases.ROUND) {
+                if (game.currentRound == 2) {
+                  game.currentRound = 1;
+                } else if (game.currentRound == 3) {
+                  game.currentPhase = game.phases.TRICK;
+                }
+            } else if (game.currentPhase == game.phases.TRICK) {
+                game.currentPhase = game.phases.ROUND;
+                game.currentRound = 2;
+            } else if (game.currentPhase == game.phases.CHICAGO) {
+                game.currentPhase = game.phases.ROUND;
+                game.currentRound = 2;
+              }
+              game.buttonsDisabled = false;
+}
