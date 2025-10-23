@@ -1,11 +1,3 @@
-export function startGame(game) {
-              let randomNum = Math.floor(Math.random() * game.players.length);
-              game.currentPlayer = randomNum;
-              isDealer(game);
-
-            game.buttonsDisabled = false;
-}
-
 export function checkWinner(game) {
             let winningThreshhold = 52;
             let highestPoint = 0;
@@ -64,7 +56,10 @@ export function isDealer(game) {
             game.players[game.currentDealer].dealer = true;
 }
 
-export function nextPhase(game) {
+export async function nextPhase(game){
+            game.transitioning = true;
+
+              await new Promise(resolve => setTimeout(resolve, 1000));
               if (game.currentPhase === game.phases.FINISHED) {
                 game.currentPhase = game.phases.START;
               }

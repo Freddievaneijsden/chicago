@@ -160,7 +160,6 @@
       import { AddPlayers } from "./components/AddPlayers.js";
       import { RevertScore } from "./components/RevertScore.js";
       import { ResultList } from "./components/ResultList.js";
-      import { startGame } from "./gameLogic.js";
       import { checkWinner } from "./gameLogic.js";
       import { resetGame } from "./gameLogic.js";
       import { isDealer } from "./gameLogic.js";
@@ -251,33 +250,38 @@
           },
         },
         methods: {
-          startGame() {
-            this.disableButtons();
-            setTimeout(() => {
-              nextPhase(this);
-              startGame(this);
-            }, 1000);
+          delay(ms) {
+            return new Promise((resolve) => setTimeout(resolve, ms));
           },
-          addScore(valueIndex) {
+          async startGame() {
             this.disableButtons();
-            setTimeout(() => {
-              addScore(this, valueIndex);
-            }, 1000);
+
+            await this.nextPhase();
+            await this.delay(1000);
+
+            let randomNum = Math.floor(Math.random() * this.players.length);
+            this.currentPlayer = randomNum;
+
+            isDealer(this);
+
+            this.buttonsDisabled = false;
+          },
+          async addScore(valueIndex) {
+            this.disableButtons();
+            await this.delay(1000);
+            addScore(this, valueIndex);
           },
           setCurrentPlayer(index) {
             this.currentPlayer = index;
-          },
-          nextPhase() {
-            this.transitioning = true;
-            setTimeout(() => {
-              nextPhase(this);
-            }, 1000);
           },
           checkWinner() {
             checkWinner(this);
           },
           isDealer() {
             isDealer(this);
+          },
+          nextPhase() {
+            nextPhase(this);
           },
           showScoring() {
             this.changeScore = true;
